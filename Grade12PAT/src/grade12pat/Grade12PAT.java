@@ -15,7 +15,8 @@ public class Grade12PAT {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new LoginScreen().setVisible(true);
+        Session session = new Session();
+        session.showLoginScreen();
     }
     
 }
