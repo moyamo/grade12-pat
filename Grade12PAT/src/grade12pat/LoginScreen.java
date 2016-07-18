@@ -116,6 +116,7 @@ public class LoginScreen extends javax.swing.JFrame {
             if (user == null) {
                 lblStatus.setText("Invalid username or password.");
             } else {
+                session.setLoggedInUser(user);
                 session.showAppointments();
             }
             
