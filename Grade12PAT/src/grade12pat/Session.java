@@ -88,6 +88,17 @@ public class Session  {
         Query q =  this.entityManager.createNativeQuery(query);
         return q.getResultList();
     }
+     
+    public int nextId(String table) {
+        Object biggestId = sqlQuery("SELECT MAX(id) FROM " + table).get(0);
+        int id;
+        if (biggestId == null) {
+            id = 1;
+        } else {
+            id = ((int) biggestId) + 1;
+        }
+        return id;
+    }
     public Settings getSettings(){
         return this.settings;
     }

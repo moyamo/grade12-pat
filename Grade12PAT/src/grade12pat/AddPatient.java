@@ -156,17 +156,9 @@ public class AddPatient extends javax.swing.JFrame {
         pToAdd.setIdnumber(txfIdNumber.getText());
         
         EntityManager em = session.getEntityManager();
-        
-        em.getTransaction().begin();
-        
-        Object biggestId = session.sqlQuery("SELECT MAX(id) FROM PATIENT").get(0);
-        int id;
-        if (biggestId == null) {
-            id = 1;
-        } else {
-            id = ((int) biggestId) + 1;
-        }
-        pToAdd.setId(id);
+        // TODO try catch
+        em.getTransaction().begin();        
+        pToAdd.setId(session.nextId("patient"));
         em.persist(pToAdd);
         em.getTransaction().commit();
         session.showAddAppointment();

@@ -6,6 +6,7 @@
 package grade12pat;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -35,7 +36,7 @@ public class AppointmentBook extends javax.swing.JFrame {
             RcdPatient patient = app.getPatientid();
             tableContents[i][0] = patient.getFirstnames() + " "+ patient.getSurname();
             tableContents[i][1] = app.getDoctor();
-            tableContents[i][2] = DateFormat.getDateInstance().format(app.getTime());
+            tableContents[i][2] = new SimpleDateFormat("yyyy/MM/dd hh:mm").format(app.getTime());
         }
         DefaultTableModel dtm = new DefaultTableModel(tableContents, headings);
         tblAppointments.setModel(dtm);
