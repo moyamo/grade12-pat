@@ -26,7 +26,7 @@ public class AppointmentBook extends javax.swing.JFrame {
 
     private void refreshList() {
         List<RcdAppointments> appointments;
-        appointments = session.sqlQuery("SELECT * FROM APPOINTMENTS");
+        appointments = session.sqlQuery("SELECT * FROM APPOINTMENTS", RcdAppointments.class);
         
         String[][] tableContents = new String[appointments.size()][3];
         String[] headings = {"Patient", "Doctor", "Time"};

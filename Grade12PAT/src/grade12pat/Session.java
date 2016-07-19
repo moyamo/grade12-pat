@@ -46,6 +46,12 @@ public class Session  {
         activeFrame.setVisible(true);
     }
     
+    public void addNewPatient() {
+        disposeIfNotNull();
+        activeFrame = new AddPatient(this);
+        activeFrame.setVisible(true);
+    }
+    
     // TODO move login logic to here
     public void setLoggedInUser(User user) {
         loggedInUser = user;
@@ -73,18 +79,20 @@ public class Session  {
         return this.entityManager;
     }
     
-    public List sqlQuery(String query) {
-        Query q =  this.entityManager.createNativeQuery(query);
+    public List sqlQuery(String query, Class resultClass) {
+        Query q =  this.entityManager.createNativeQuery(query, resultClass);
         return q.getResultList();
     }
     
+     public List sqlQuery(String query) {
+        Query q =  this.entityManager.createNativeQuery(query);
+        return q.getResultList();
+    }
     public Settings getSettings(){
         return this.settings;
     }
 
-    void addNewPatient() {
-        System.out.println("blah");
-    }
+   
     
     class SettingsRepeater implements WindowListener{
         @Override

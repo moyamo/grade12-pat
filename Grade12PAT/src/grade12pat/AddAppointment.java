@@ -5,8 +5,8 @@
  */
 package grade12pat;
 
+import java.lang.reflect.Method;
 import java.util.List;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -15,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class AddAppointment extends javax.swing.JFrame {
     Session session;
+    private int newPatientIndex = 0;
     /**
      * Creates new form AddAppointment
      */
@@ -25,7 +26,7 @@ public class AddAppointment extends javax.swing.JFrame {
     }
 
     private void initializeFields() {
-        List<RcdPatient> patients = session.sqlQuery("SELECT * FROM PATIENT");
+        List<RcdPatient> patients = session.sqlQuery("SELECT * FROM PATIENT", RcdPatient.class);
         String[] patientNames = new String[patients.size() + 1];
         int i = 0;
         for (RcdPatient p : patients) {
@@ -33,6 +34,7 @@ public class AddAppointment extends javax.swing.JFrame {
             i++;
         }
         patientNames[i] = "Add new patient...";
+        newPatientIndex = i;
         lstPatient.setListData(patientNames);
         String[] doctors = session.getSettings().getDoctors();    
         cmbDoctors.setModel(new DefaultComboBoxModel<String>(doctors));
@@ -159,7 +161,7 @@ public class AddAppointment extends javax.swing.JFrame {
 
     private void lstPatientValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPatientValueChanged
         // Add new patient was selected
-        if (lstPatient.getSelectedIndex() == lstPatient.getMaxSelectionIndex()) {
+        if (lstPatient.getSelectedIndex() == newPatientIndex) {
             session.addNewPatient();
         }
     }//GEN-LAST:event_lstPatientValueChanged
