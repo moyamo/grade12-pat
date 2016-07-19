@@ -1,0 +1,6 @@
+BankName:EVIL BANK
+PracticeAddress:3 Place,Area,4242
+BankNumber:4249204248
+PracticeNumber:32232
+Doctors:Mowzer#Parker
+BranchCode:44824

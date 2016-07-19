@@ -6,7 +6,7 @@
 package grade12pat;
 
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
+import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -42,7 +42,7 @@ public class Session  {
     
     public void showSetup() {
         disposeIfNotNull();
-        activeFrame = new Setup();
+        activeFrame = new Setup(settings);
         activeFrame.setVisible(true);
     }
     
@@ -51,25 +51,46 @@ public class Session  {
         if (settings == null) {
             JOptionPane.showMessageDialog(null, "You must enter the settings before proceeding");
             showSetup();
-            activeFrame.addWindowStateListener(new SettingsRepeater());
+            activeFrame.addWindowListener(new SettingsRepeater());
         } else {
             showAppointments();
         }
     }
-    class SettingsRepeater implements WindowStateListener {
+    class SettingsRepeater implements WindowListener{
+        @Override
+        public void windowOpened(WindowEvent we) {
+        }
 
         @Override
-        public void windowStateChanged(WindowEvent we) {
-            if (we.getNewState() == WindowEvent.WINDOW_CLOSED) {
-                settings = Settings.loadSettingsFromFile();
+        public void windowClosing(WindowEvent we) {
+        }
+
+        @Override
+        public void windowClosed(WindowEvent we) {
+            settings = Settings.loadSettingsFromFile();
                 if (settings == null) {
                     JOptionPane.showMessageDialog(null, "You must enter the settings before proceeding");
                     showSetup();
-                    activeFrame.addWindowStateListener(this);
+                    activeFrame.addWindowListener(this);
                 } else {
                 showAppointments();
                 }
-            }
+        }
+
+        @Override
+        public void windowIconified(WindowEvent we) {
+        }
+
+        @Override
+        public void windowDeiconified(WindowEvent we) {
+        }
+
+        @Override
+        public void windowActivated(WindowEvent we) {
+        }
+
+        @Override
+        public void windowDeactivated(WindowEvent we) {
         }
     }
 }
