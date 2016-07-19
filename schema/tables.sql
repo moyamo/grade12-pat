@@ -1,3 +1,5 @@
+-- TODO Add gender
+-- TODO Move cellphone number into billing information ?
 create table Patient (
 	id integer primary key,
 	firstNames varchar(30),
