@@ -7,6 +7,10 @@ package grade12pat;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -18,6 +22,7 @@ public class Session  {
     private JFrame activeFrame = null;
     private User loggedInUser = null;
     private Settings settings = null;
+    private EntityManager entityManager = null;
     
     public void disposeIfNotNull() {
         if (activeFrame != null) activeFrame.dispose();
@@ -31,13 +36,14 @@ public class Session  {
     
     public void showAppointments() {
         disposeIfNotNull();
-        activeFrame = new AppointmentBook();
+        activeFrame = new AppointmentBook(this);
         activeFrame.setVisible(true);
     }
     
     // TODO move login logic to here
     public void setLoggedInUser(User user) {
         loggedInUser = user;
+        entityManager = Persistence.createEntityManagerFactory("Grade12PATPU").createEntityManager();
     }
     
     public void showSetup() {
@@ -56,6 +62,16 @@ public class Session  {
             showAppointments();
         }
     }
+    
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
+    
+    public List sqlQuery(String query) {
+        Query q =  this.entityManager.createNativeQuery(query);
+        return q.getResultList();
+    }
+    
     class SettingsRepeater implements WindowListener{
         @Override
         public void windowOpened(WindowEvent we) {
