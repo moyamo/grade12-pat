@@ -5,13 +5,11 @@
  */
 package grade12pat;
 
-import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.swing.DefaultComboBoxModel;
 

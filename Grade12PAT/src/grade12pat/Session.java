@@ -105,7 +105,7 @@ public class Session  {
 
     void showViewMedicalHistory(RcdPatient patient) {
         disposeIfNotNull();
-        activeFrame = new MedicalHistory(patient);
+        activeFrame = new MedicalHistory(patient, this);
         activeFrame.setVisible(true);
     }
 
