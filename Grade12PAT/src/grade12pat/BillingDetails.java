@@ -5,21 +5,50 @@
  */
 package grade12pat;
 
+import java.util.NoSuchElementException;
+import javax.persistence.EntityManager;
+
 /**
  *
  * @author yaseen
  */
 public class BillingDetails extends javax.swing.JFrame {
     RcdPatient patient;
+    RcdPatientBillingDetails details;
+    Session session;
     
     /**
      * Creates new form BillingDetails
      */
-    public BillingDetails(RcdPatient patient) {
+    public BillingDetails(RcdPatient patient, Session session) {
         initComponents();
         this.patient = patient;
+        this.session = session;
+        try {
+            this.details = patient.getRcdPatientBillingDetailsCollection().iterator().next();
+        } catch (NoSuchElementException e) {
+            EntityManager em = session.getEntityManager();
+            em.getTransaction().begin();
+            this.details = new RcdPatientBillingDetails(session.nextId("PatientBillingDetails"));
+            this.details.setPatientid(this.patient);
+            this.patient.getRcdPatientBillingDetailsCollection().add(this.details);
+            em.persist(details);
+            em.getTransaction().commit();
+        }
+        fillInformation();
     }
 
+    private void fillInformation() {
+        txfEmailAddress.setText(details.getEmailaddress());
+        txaHomeAddress.setText(details.getHomeaddress());
+        String paymentMethod = details.getPaymentmethod();
+        if (paymentMethod != null && paymentMethod.equals("MEDICALAID")) {
+            cmbPaymentMethod.setSelectedIndex(0);
+        } else {
+            cmbPaymentMethod.setSelectedIndex(1);
+        }
+        lblPatientName.setText(patient.getFirstnames() + " " + patient.getSurname());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,6 +67,8 @@ public class BillingDetails extends javax.swing.JFrame {
         txaHomeAddress = new javax.swing.JTextArea();
         cmbPaymentMethod = new javax.swing.JComboBox<>();
         lblPatientName = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,8 +85,27 @@ public class BillingDetails extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txaHomeAddress);
 
         cmbPaymentMethod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medical Aid", "Cash" }));
+        cmbPaymentMethod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbPaymentMethodActionPerformed(evt);
+            }
+        });
 
         lblPatientName.setText("Patient Name");
+
+        jButton2.setText("Save");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Back");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -75,8 +125,12 @@ public class BillingDetails extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(cmbPaymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPatientName)
                     .addComponent(jButton1)
-                    .addComponent(lblPatientName))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)))
                 .addContainerGap(146, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -96,17 +150,46 @@ public class BillingDetails extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(cmbPaymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        details.setEmailaddress(txfEmailAddress.getText());
+        details.setHomeaddress(txaHomeAddress.getText());
+        String paymentMethod = (String) cmbPaymentMethod.getSelectedItem();
+        if (paymentMethod.equals("Medical Aid"))
+            details.setPaymentmethod("MEDICALAID");
+        else if (paymentMethod.equals("Cash"))
+            details.setPaymentmethod("CASH");
+        else
+            throw new RuntimeException("ComboBox selection in BillingDetails was '" + paymentMethod + "' which is invalid");
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().persist(details);
+        session.getEntityManager().getTransaction().commit();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.session.showAppointments();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void cmbPaymentMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPaymentMethodActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbPaymentMethodActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbPaymentMethod;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -115,4 +198,5 @@ public class BillingDetails extends javax.swing.JFrame {
     private javax.swing.JTextArea txaHomeAddress;
     private javax.swing.JTextField txfEmailAddress;
     // End of variables declaration//GEN-END:variables
+
 }

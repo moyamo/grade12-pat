@@ -66,7 +66,7 @@ public class Session  {
     
     public void showViewBillingDetails(RcdPatient patient) {
         disposeIfNotNull();
-        activeFrame = new BillingDetails(patient);
+        activeFrame = new BillingDetails(patient, this);
         activeFrame.setVisible(true);
     }
     
