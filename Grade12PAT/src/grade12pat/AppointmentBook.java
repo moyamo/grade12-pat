@@ -5,9 +5,11 @@
  */
 package grade12pat;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,17 +18,28 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AppointmentBook extends javax.swing.JFrame {
     Session session;
+    private ListSelectionModel lsmAppoinments;
+    private List<RcdAppointments> appointments;
+
     /**
      * Creates new form AppointmentBook
      */
     public AppointmentBook(Session session) {
         initComponents();
         this.session = session;
+        this.lsmAppoinments = tblAppointments.getSelectionModel();
+        
+        
+        lsmAppoinments.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                tblAppointmentsValueChanged(lse);
+            }
+        });
         refreshList();
     }
 
     private void refreshList() {
-        List<RcdAppointments> appointments;
         appointments = session.sqlQuery("SELECT * FROM APPOINTMENTS", RcdAppointments.class);
         
         String[][] tableContents = new String[appointments.size()][3];
@@ -56,14 +69,12 @@ public class AppointmentBook extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        btnViewHistory = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tblAppointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
                 {null, null, null}
             },
             new String [] {
@@ -85,6 +96,12 @@ public class AppointmentBook extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblAppointments.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblAppointments.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAppointmentsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblAppointments);
 
         btnAdd.setText("Add");
@@ -97,6 +114,13 @@ public class AppointmentBook extends javax.swing.JFrame {
         btnDelete.setText("Delete");
 
         jButton1.setText("Edit");
+
+        btnViewHistory.setText("View History");
+        btnViewHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewHistoryActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,6 +137,8 @@ public class AppointmentBook extends javax.swing.JFrame {
                 .addComponent(btnDelete)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnViewHistory)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -124,7 +150,8 @@ public class AppointmentBook extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
                     .addComponent(btnDelete)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(btnViewHistory))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -135,9 +162,22 @@ public class AppointmentBook extends javax.swing.JFrame {
         session.showAddAppointment();
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void tblAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAppointmentsMouseClicked
+    }//GEN-LAST:event_tblAppointmentsMouseClicked
+
+    private void btnViewHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewHistoryActionPerformed
+        // TODO add your handling code here:
+        int index = lsmAppoinments.getMinSelectionIndex();
+        session.showViewMedicalHistory(appointments.get(index).getPatientid());
+    }//GEN-LAST:event_btnViewHistoryActionPerformed
+    
+    private void tblAppointmentsValueChanged(ListSelectionEvent lse) {
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnViewHistory;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblAppointments;

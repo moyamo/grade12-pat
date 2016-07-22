@@ -103,6 +103,12 @@ public class Session  {
         return this.settings;
     }
 
+    void showViewMedicalHistory(RcdPatient patient) {
+        disposeIfNotNull();
+        activeFrame = new MedicalHistory(patient);
+        activeFrame.setVisible(true);
+    }
+
    
     
     class SettingsRepeater implements WindowListener{
