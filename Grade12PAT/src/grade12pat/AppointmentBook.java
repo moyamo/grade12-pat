@@ -70,6 +70,7 @@ public class AppointmentBook extends javax.swing.JFrame {
         btnDelete = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         btnViewHistory = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,6 +123,13 @@ public class AppointmentBook extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Billing Details");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -139,6 +147,8 @@ public class AppointmentBook extends javax.swing.JFrame {
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnViewHistory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -151,7 +161,8 @@ public class AppointmentBook extends javax.swing.JFrame {
                     .addComponent(btnAdd)
                     .addComponent(btnDelete)
                     .addComponent(jButton1)
-                    .addComponent(btnViewHistory))
+                    .addComponent(btnViewHistory)
+                    .addComponent(jButton2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -170,6 +181,11 @@ public class AppointmentBook extends javax.swing.JFrame {
         int index = lsmAppoinments.getMinSelectionIndex();
         session.showViewMedicalHistory(appointments.get(index).getPatientid());
     }//GEN-LAST:event_btnViewHistoryActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int index = lsmAppoinments.getMinSelectionIndex();
+        session.showViewBillingDetails(appointments.get(index).getPatientid());
+    }//GEN-LAST:event_jButton2ActionPerformed
     
     private void tblAppointmentsValueChanged(ListSelectionEvent lse) {
     }
@@ -179,6 +195,7 @@ public class AppointmentBook extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnViewHistory;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblAppointments;
     // End of variables declaration//GEN-END:variables

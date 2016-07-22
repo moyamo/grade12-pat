@@ -64,6 +64,12 @@ public class Session  {
         activeFrame.setVisible(true);
     }
     
+    public void showViewBillingDetails(RcdPatient patient) {
+        disposeIfNotNull();
+        activeFrame = new BillingDetails(patient);
+        activeFrame.setVisible(true);
+    }
+    
     public void loadSettings() {
         settings = Settings.loadSettingsFromFile();
         if (settings == null) {

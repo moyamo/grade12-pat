@@ -40,8 +40,6 @@ create table BillingItems (
 	price decimal not null
 );
 
-
-
 create table Allergies (
 	id integer primary key,
 	allergyType VARCHAR(30) not null,

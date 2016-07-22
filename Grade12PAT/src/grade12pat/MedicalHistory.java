@@ -73,6 +73,7 @@ public class MedicalHistory extends javax.swing.JFrame {
             i++;
         }
         tblReadings.setModel(new DefaultTableModel(readings, headings));
+        lblPatientName.setText(patient.getFirstnames() + " " + patient.getSurname());
     }
     
     /**
