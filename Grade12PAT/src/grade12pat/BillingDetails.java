@@ -79,6 +79,11 @@ public class BillingDetails extends javax.swing.JFrame {
         jLabel3.setText("Payment Method");
 
         jButton1.setText("Medical Aid Plan");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         txaHomeAddress.setColumns(20);
         txaHomeAddress.setRows(5);
@@ -184,6 +189,9 @@ public class BillingDetails extends javax.swing.JFrame {
     private void cmbPaymentMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPaymentMethodActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbPaymentMethodActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbPaymentMethod;

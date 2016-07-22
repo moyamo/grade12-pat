@@ -59,7 +59,6 @@ create table Appointments (
 create table BillingHistory (
 	id integer primary key,
 	patientId integer not null,
-	emailAddress VARCHAR(255),
 	description VARCHAR(30) not null,
 	price decimal not null,
 	time date,
