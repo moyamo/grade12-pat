@@ -76,6 +76,12 @@ public class Session  {
         activeFrame.setVisible(true);
     }
     
+    public void showGraph(List<RcdPatientReadings> readings) {
+        disposeIfNotNull();
+        activeFrame = new GraphView(readings);
+        activeFrame.setVisible(true);
+    }
+    
     public void loadSettings() {
         settings = Settings.loadSettingsFromFile();
         if (settings == null) {

@@ -8,11 +8,14 @@ package grade12pat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -111,6 +114,7 @@ public class MedicalHistory extends javax.swing.JFrame {
         txfType = new javax.swing.JTextField();
         txfValue = new javax.swing.JTextField();
         jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -198,6 +202,13 @@ public class MedicalHistory extends javax.swing.JFrame {
             }
         });
 
+        jButton10.setText("Graph");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -256,7 +267,9 @@ public class MedicalHistory extends javax.swing.JFrame {
                                     .addContainerGap()))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jButton9)
-                                .addGap(113, 113, 113))))))
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton10)
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,7 +322,9 @@ public class MedicalHistory extends javax.swing.JFrame {
                             .addComponent(txfType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txfValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jButton9))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton9)
+                            .addComponent(jButton10)))))
         );
 
         pack();
@@ -377,8 +392,18 @@ public class MedicalHistory extends javax.swing.JFrame {
         fillInformation();
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        List<String> readings = session.sqlQuery("SELECT readingType from PatientReadings WHERE medicalHistoryId = " + this.medicalHistory.getId() + " GROUP BY readingType");
+        JOptionPane.showOptionDialog(null, "Please choose something to graph",
+                "Graph", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null,
+                readings.toArray(), null);
+        session.showGraph(new ArrayList(this.medicalHistory.getRcdPatientReadingsCollection()));
+    }//GEN-LAST:event_jButton10ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

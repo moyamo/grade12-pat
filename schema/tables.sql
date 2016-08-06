@@ -95,3 +95,10 @@ create table PatientBillingDetails (
 	foreign key (patientId) references Patient(id),
 	foreign key (medicalAidPlanId) references MedicalAid(id)
 );
+
+create table Payment (
+	id integer primary key,
+	patientId integer not null,
+	amount decimal not null
+	time date not null,
+);
