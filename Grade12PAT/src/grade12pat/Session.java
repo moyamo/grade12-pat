@@ -82,6 +82,12 @@ public class Session  {
         activeFrame.setVisible(true);
     }
     
+    public void showPrintStatements() {
+        disposeIfNotNull();
+        activeFrame = new PrintStatements(this);
+        activeFrame.setVisible(true);
+    }
+    
     public void loadSettings() {
         settings = Settings.loadSettingsFromFile();
         if (settings == null) {

@@ -72,6 +72,7 @@ public class AppointmentBook extends javax.swing.JFrame {
         btnViewHistory = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,6 +139,13 @@ public class AppointmentBook extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setText("Statements");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,7 +168,10 @@ public class AppointmentBook extends javax.swing.JFrame {
                                 .addComponent(btnViewHistory)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton2))
-                            .addComponent(jButton3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton4)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -177,7 +188,9 @@ public class AppointmentBook extends javax.swing.JFrame {
                     .addComponent(btnViewHistory)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -206,6 +219,10 @@ public class AppointmentBook extends javax.swing.JFrame {
         int index = lsmAppoinments.getMinSelectionIndex();
         session.showBillPatient(appointments.get(index));
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        session.showPrintStatements();
+    }//GEN-LAST:event_jButton4ActionPerformed
     
     private void tblAppointmentsValueChanged(ListSelectionEvent lse) {
     }
@@ -217,6 +234,7 @@ public class AppointmentBook extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblAppointments;
     // End of variables declaration//GEN-END:variables
