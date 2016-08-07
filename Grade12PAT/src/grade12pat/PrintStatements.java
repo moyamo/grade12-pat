@@ -141,6 +141,7 @@ public class PrintStatements extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         PrinterJob job = PrinterJob.getPrinterJob();
         MessageFormat empty = new MessageFormat("");
+        jButton1ActionPerformed(null);
         job.setPrintable(epnPreview.getPrintable(empty, empty));
         boolean result = job.printDialog();
         if (result) {
