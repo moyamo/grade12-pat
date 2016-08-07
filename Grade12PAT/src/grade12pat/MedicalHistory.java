@@ -394,11 +394,11 @@ public class MedicalHistory extends javax.swing.JFrame {
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         List<String> readings = session.sqlQuery("SELECT readingType from PatientReadings WHERE medicalHistoryId = " + this.medicalHistory.getId() + " GROUP BY readingType");
-        JOptionPane.showOptionDialog(null, "Please choose something to graph",
+        int result = JOptionPane.showOptionDialog(null, "Please choose something to graph",
                 "Graph", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null,
                 readings.toArray(), null);
-        session.showGraph(new ArrayList(this.medicalHistory.getRcdPatientReadingsCollection()));
+        session.showGraph(new ArrayList(this.medicalHistory.getRcdPatientReadingsCollection()), readings.get(result));
     }//GEN-LAST:event_jButton10ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -8,7 +8,6 @@ package grade12pat;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -19,18 +18,26 @@ import javax.swing.JPanel;
  * @author yaseen
  */
 public class GraphView extends javax.swing.JFrame {
-    List<RcdPatientReadings> readings;
+    private List<RcdPatientReadings> readings;
+    private String title;
     /**
      * Creates new form GraphView
      */
-    public GraphView(List<RcdPatientReadings> readings) {
+    public GraphView(List<RcdPatientReadings> readings, String title) {
         initComponents();
         this.readings = readings;
+        this.title = title;
     }
     
     class GraphPanel extends JPanel {
         int padding = 10;
         int pointRadius = 5;
+        int numXticks = 10;
+        int numYticks = 10;
+        double minY;
+        double maxY;
+        double minX;
+        double maxX;
         
         @Override
         protected void paintComponent(Graphics g) {
@@ -38,18 +45,56 @@ public class GraphView extends javax.swing.JFrame {
             int width = this.getWidth();
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, width, height);
+            
+            drawTitle(g);
+            drawBorder(g, width - 4 * padding, height - 4 * padding);
+           
+            g.translate(2 * padding, 2 * padding);
+            drawPoints(g, width - 4 * padding, height - 4 * padding);
+            g.translate(-2 * padding, -2 * padding);
+        }
+        
+        private void drawBorder(Graphics g, int coordW, int coordH) {
+            int height = this.getHeight();
+            int width = this.getWidth();
             g.setColor(Color.BLACK);
-            g.drawRect(padding, padding, width -2 * padding, height - 2 * padding);
-            List<Point> coords = computeCoordinates(width - 4 * padding, height - 4 * padding);
+            g.drawRect(padding, padding, width - 2 * padding, height - 2 * padding);
+            double diff = oneSignificantDigit((maxY - minY) / numYticks);
+            double start = oneSignificantDigit(minY);
+            for (int i = 0; i < numYticks; ++i) {
+                double yValue = i * diff + start;
+                int y = coordH - (int) readingToY(yValue, coordH);
+                g.drawLine(padding - 2, y, padding + 2, y);
+                g.drawString(yValue + "", padding, y);
+            }
+        }
+        
+        private double oneSignificantDigit(double a) {
+            String base10 = a + "";
+            if (base10.charAt(0) == '0') {
+                base10 = base10.substring(2);
+            }
+            double exp = Math.floor(Math.log10(a));
+            double firstDigit = base10.charAt(0) - '0';
+            return firstDigit * Math.pow(10, exp);
+        }
+        
+        private void drawTitle(Graphics g) {
+            g.setColor(Color.BLACK);
+            g.drawString("Graph showing " + title, padding * 2, 2 * padding + g.getFontMetrics().getHeight());
+        }
+       
+        private void drawPoints(Graphics g, int width, int height) {
+            List<Point> coords = computeCoordinates(width, height);
             Point last = null;
             for (int i = 0; i < coords.size(); ++i) {
                 Point c = coords.get(i);
-                int cx = (int) c.getX() + 2 * padding;
-                int cy = height - (int) c.getY() - 2 * padding;
+                int cx = (int) c.getX();
+                int cy = height - (int) c.getY();
                 g.fillOval(cx - pointRadius, cy - pointRadius,  2 * pointRadius,  2 * pointRadius);
                 if (last != null) {
-                    int lx = (int) last.getX() + 2 * padding;
-                    int ly = height - (int) last.getY() - 2 * padding;
+                    int lx = (int) last.getX();
+                    int ly = height - (int) last.getY();
                     g.drawLine(lx, ly, cx, cy);
                 }
                 last = c;
@@ -67,27 +112,34 @@ public class GraphView extends javax.swing.JFrame {
                     return a.getTime().compareTo(b.getTime());
                 }
             });
-            double first = readings.get(0).getTime().getTime();
-            double last = readings.get(nr - 1).getTime().getTime();
-            double diff = last - first;
-            double minY = 0;
-            double maxY = 0;
+            minX = readings.get(0).getTime().getTime();
+            maxX = readings.get(nr - 1).getTime().getTime();
+            minY = 0;
+            maxY = 0;
             
             for (int i = 0; i < nr; ++i) {
                 double time = readings.get(i).getTime().getTime();
-                coords.add(new Point((int)((time - first) / diff * width), 0));
+                coords.add(new Point(timeToX(time, width), 0));
                 double reading = readings.get(i).getReading();
                 minY = Math.min(reading, minY);
                 maxY = Math.max(reading, maxY);
             }
             for (int i = 0; i < nr; ++i) {
                 double reading = readings.get(i).getReading();
-                coords.get(i).y = (int)((reading - minY) / (maxY - minY) * height);
+                coords.get(i).y = readingToY(reading, height);
             }                 
             return coords;
         }
+        
+        private int readingToY(double reading, int height) {
+            return (int)((reading - minY) / (maxY - minY) * height);
+        }
+        
+        private int timeToX(double time, int width) {
+            return (int)((time - minX) / (maxX - minX) * width);
+        }
     }
-    /**
+    /** 
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
