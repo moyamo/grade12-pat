@@ -34,6 +34,11 @@ public class Session  {
         activeFrame.setVisible(true);
     }
     
+    public void showMainScreen() {
+        disposeIfNotNull();
+        activeFrame = new MainScreen();
+        activeFrame.setVisible(true);
+    }
     public void showAppointments() {
         disposeIfNotNull();
         activeFrame = new AppointmentBook(this);
@@ -55,7 +60,12 @@ public class Session  {
     // TODO move login logic to here
     public void setLoggedInUser(User user) {
         loggedInUser = user;
-        entityManager = Persistence.createEntityManagerFactory("Grade12PATPU").createEntityManager();
+        try {
+            entityManager = Persistence.createEntityManagerFactory("Grade12PATPU").createEntityManager();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(activeFrame, "Unable to connect to Database. Make sure it is running.", "Database Connection Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public void showSetup() {
@@ -95,7 +105,7 @@ public class Session  {
             showSetup();
             activeFrame.addWindowListener(new SettingsRepeater());
         } else {
-            showAppointments();
+            showMainScreen();
         }
     }
     
