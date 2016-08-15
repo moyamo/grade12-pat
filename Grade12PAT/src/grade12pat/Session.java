@@ -13,6 +13,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
  */
 public class Session  {
     private JFrame activeFrame = null;
+    private MainScreen mainScreen = null;
     private User loggedInUser = null;
     private Settings settings = null;
     private EntityManager entityManager = null;
@@ -36,13 +38,24 @@ public class Session  {
     
     public void showMainScreen() {
         disposeIfNotNull();
-        activeFrame = new MainScreen();
+        mainScreen = new MainScreen(this);
+        activeFrame = mainScreen;
         activeFrame.setVisible(true);
     }
     public void showAppointments() {
-        disposeIfNotNull();
-        activeFrame = new AppointmentBook(this);
-        activeFrame.setVisible(true);
+        boolean alreadyOpen = false;
+        int i = 0;
+        JPanel tab = mainScreen.getTab(i);
+        for ( ; tab != null; i++, tab = mainScreen.getTab(i)) {
+            if (tab.getClass() == AppointmentBookPanel.class) {
+                mainScreen.setFocus(i);
+                alreadyOpen = true;
+                break;
+            }
+        }
+        if (!alreadyOpen) {
+            mainScreen.addTab("Appointments", new AppointmentBookPanel());
+        }
     }
     
     public void showAddAppointment() {
