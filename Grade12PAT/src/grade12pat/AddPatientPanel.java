@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
  */
 public class AddPatientPanel extends javax.swing.JPanel {
     Session session;
+    RcdPatient patient;
     /**
      * Creates new form AddPatientPanel
      */
@@ -67,6 +68,11 @@ public class AddPatientPanel extends javax.swing.JPanel {
         jLabel1.setText("firstNames");
 
         btnCancel.setText("Billing Details");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("lastNames");
 
@@ -168,6 +174,10 @@ public class AddPatientPanel extends javax.swing.JPanel {
         em.getTransaction().commit();
         session.showAddAppointment();
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        session.showViewBillingDetails(patient);
+    }//GEN-LAST:event_btnCancelActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

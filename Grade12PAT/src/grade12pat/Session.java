@@ -63,9 +63,7 @@ public class Session  {
     }
     
     public void addNewPatient() {
-        disposeIfNotNull();
-        activeFrame = new AddPatient(this);
-        activeFrame.setVisible(true);
+       mainScreen.addTab("Add Patient", new AddPatientPanel(this));
     }
     
     // TODO move login logic to here
@@ -86,9 +84,7 @@ public class Session  {
     }
     
     public void showViewBillingDetails(RcdPatient patient) {
-        disposeIfNotNull();
-        activeFrame = new BillingDetails(patient, this);
-        activeFrame.setVisible(true);
+        mainScreen.addTab("Edit Billing Details", new BillingDetailsPanel());
     }
     
     public void showBillPatient(RcdAppointments appointment) {
