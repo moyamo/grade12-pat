@@ -110,6 +110,7 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
     protected void addTab(String title, JPanel panel) {
         tabbedPane.addTab(title, panel);
+        tabbedPane.setSelectedComponent(panel);
     }
     
     protected JPanel getTab(int i){

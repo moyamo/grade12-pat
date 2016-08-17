@@ -54,14 +54,12 @@ public class Session  {
             }
         }
         if (!alreadyOpen) {
-            mainScreen.addTab("Appointments", new AppointmentBookPanel());
+            mainScreen.addTab("Appointments", new AppointmentBookPanel(this));
         }
     }
     
     public void showAddAppointment() {
-        disposeIfNotNull();
-        activeFrame = new AddAppointment(this);
-        activeFrame.setVisible(true);
+        mainScreen.addTab("Add Appointments", new AddAppointmentPanel());
     }
     
     public void addNewPatient() {

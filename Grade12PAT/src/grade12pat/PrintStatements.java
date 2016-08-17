@@ -8,15 +8,21 @@ package grade12pat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Transport;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.rtf.RTFEditorKit;
-
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 /**
  *
  * @author yaseen
@@ -32,6 +38,7 @@ public class PrintStatements extends javax.swing.JFrame {
         initComponents();
         this.session = session;
         fillList();
+       
     }
 
     private void fillList() {
@@ -84,6 +91,11 @@ public class PrintStatements extends javax.swing.JFrame {
         });
 
         jButton3.setText("Email");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jScrollPane2.setViewportView(epnPreview);
 
@@ -152,6 +164,29 @@ public class PrintStatements extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        javax.mail.Session mailSession = javax.mail.Session.getInstance(System.getProperties());
+        Message message = new MimeMessage(mailSession);
+        try {
+            message.setFrom(new InternetAddress("noreply@practicedomain.com"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress("yaseenmowzer@gmail.com"));
+            message.setSubject("Test");
+            BufferedReader br = new BufferedReader(new FileReader("account-statement.rtf"));
+            char[] rtfDocument = new char[(int)new File("account-statement.rtf").length()];
+            br.read(rtfDocument);
+            br.close();
+            message.setContent(rtfDocument, "application/rtf");
+            Transport.send(message);
+        } catch (MessagingException ex) {
+            Logger.getLogger(PrintStatements.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PrintStatements.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PrintStatements.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JEditorPane epnPreview;
