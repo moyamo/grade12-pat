@@ -131,7 +131,8 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAppointmentsMouseClicked
-
+        // TODO prevent secretary from using this.
+        session.showViewMedicalHistory();
     }//GEN-LAST:event_tblAppointmentsMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

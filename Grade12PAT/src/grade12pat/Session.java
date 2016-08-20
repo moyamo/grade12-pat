@@ -154,10 +154,8 @@ public class Session  {
         return this.settings;
     }
 
-    void showViewMedicalHistory(RcdPatient patient) {
-        disposeIfNotNull();
-        activeFrame = new MedicalHistory(patient, this);
-        activeFrame.setVisible(true);
+    void showViewMedicalHistory() {
+        mainScreen.addTab("Medical History", new MedicalHistoryPanel());
     }
 
     void showEditMedicalAid() {
