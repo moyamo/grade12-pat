@@ -10,12 +10,13 @@ package grade12pat;
  * @author yaseen
  */
 public class MedicalHistoryPanel extends javax.swing.JPanel {
-
+    Session session;
     /**
      * Creates new form MedicalHistoryPanel
      */
-    public MedicalHistoryPanel() {
+    public MedicalHistoryPanel(Session session) {
         initComponents();
+        this.session = session;
     }
 
     /**
@@ -46,7 +47,7 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
-        setLayout(new java.awt.GridLayout(2, 2));
+        setLayout(new java.awt.GridLayout(2, 2, 12, 12));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -76,7 +77,7 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -110,7 +111,7 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -191,6 +192,11 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
         jButton3.setText("View Graph");
 
         jButton4.setText("Bill Patient");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -231,6 +237,10 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
 
         add(jPanel4);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        session.showBillPatient();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

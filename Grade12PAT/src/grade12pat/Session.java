@@ -5,6 +5,8 @@
  */
 package grade12pat;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
@@ -14,6 +16,7 @@ import javax.persistence.Query;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -94,10 +97,8 @@ public class Session  {
         mainScreen.addTab("Edit Billing Details", new BillingDetailsPanel(this));
     }
     
-    public void showBillPatient(RcdAppointments appointment) {
-        disposeIfNotNull();
-        activeFrame = new BillPatient(appointment, this);
-        activeFrame.setVisible(true);
+    public void showBillPatient() {
+        mainScreen.addTab("Bill patient", new BillPatientPanel());
     }
     
     public void showBillingItems() {
@@ -155,7 +156,12 @@ public class Session  {
     }
 
     void showViewMedicalHistory() {
-        mainScreen.addTab("Medical History", new MedicalHistoryPanel());
+        JPanel wrapper = new JPanel();
+        JScrollPane scroll = new JScrollPane();
+        scroll.setViewportView(new MedicalHistoryPanel(this));
+        wrapper.setLayout(new GridLayout(1, 1));
+        wrapper.add(scroll);
+        mainScreen.addTab("Medical History", wrapper);
     }
 
     void showEditMedicalAid() {
