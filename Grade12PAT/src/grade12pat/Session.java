@@ -96,6 +96,10 @@ public class Session  {
         activeFrame.setVisible(true);
     }
     
+    public void showBillingItems() {
+        mainScreen.addTab("Edit Billing Items", new AddBillingItemPanel());
+    }
+    
     public void showGraph(List<RcdPatientReadings> readings, String title) {
         disposeIfNotNull();
         activeFrame = new GraphView(readings, title);
@@ -107,6 +111,7 @@ public class Session  {
         activeFrame = new PrintStatements(this);
         activeFrame.setVisible(true);
     }
+    
     
     public void loadSettings() {
         settings = Settings.loadSettingsFromFile();
