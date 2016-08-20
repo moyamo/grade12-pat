@@ -69,6 +69,10 @@ public class Session  {
        mainScreen.addTab("Add Patient", new AddPatientPanel(this));
     }
     
+    public void showManageUsers() {
+        mainScreen.addTab("Users", new ManageUsersPanel());
+    }
+    
     // TODO move login logic to here
     public void setLoggedInUser(User user) {
         loggedInUser = user;
