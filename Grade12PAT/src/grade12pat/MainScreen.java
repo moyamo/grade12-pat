@@ -69,6 +69,11 @@ public class MainScreen extends javax.swing.JFrame {
         });
 
         jButton5.setText("Statements");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -136,6 +141,11 @@ public class MainScreen extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         session.showBillingItems();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here
+        session.showPrintStatements();
+    }//GEN-LAST:event_jButton5ActionPerformed
     protected void addTab(String title, JPanel panel) {
         tabbedPane.addTab(title, panel);
         tabbedPane.setSelectedComponent(panel);

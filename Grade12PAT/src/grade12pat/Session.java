@@ -107,9 +107,7 @@ public class Session  {
     }
     
     public void showPrintStatements() {
-        disposeIfNotNull();
-        activeFrame = new PrintStatements(this);
-        activeFrame.setVisible(true);
+        mainScreen.addTab("Statements", new PrintStatementsPanel());
     }
     
     
