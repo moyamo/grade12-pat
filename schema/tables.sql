@@ -9,27 +9,29 @@ create table Patient (
 	birthday date
 );
 
-create table PatientMedicalHistory (
+create table PatientNotes (
 	id integer primary key,
 	patientId integer not null,
 	notes long varchar not null,
+	time date not null,
 	foreign key (patientId) references Patient(id)
 );
 
 create table PatientFileAttachments (
 	id integer primary key,
-	medicalHistoryId integer not null,
-	path VARCHAR(256) not null,
-	foreign key (medicalHistoryId) references PatientMedicalHistory(id)
+	patientId integer not null,
+	fileContents blob not null,
+	fileName varchar(30) not null,
+	foreign key (patientId) references Patient(id)
 );
 
 create table PatientReadings (
 	id integer primary key,
-	medicalHistoryId integer not null,
+	patientId integer not null,
 	reading double not null,
 	readingType VARCHAR(20) not null,
 	time date not null,
-	foreign key (medicalHistoryId) references PatientMedicalHistory(id)
+	foreign key (patientId) references Patient(id)
 );
 
 
@@ -49,22 +51,18 @@ create table Allergies (
 
 
 create table Appointments (
-	id integer,
+	id integer primary key,
 	doctor VARCHAR(30) not null,
 	patientId integer not null,
 	time date not null,
-	primary key (id),
 	foreign key (patientId) references Patient(id)
 );
 create table BillingHistory (
 	id integer primary key,
-	patientId integer not null,
+	appointmentId integer,
 	description VARCHAR(30) not null,
 	price decimal not null,
-	time date,
-	consultationId integer,
-	foreign key (patientId) references Patient(id),
-	foreign key (consultationId) references Appointments(id)
+        foreign key (appointmentId) references Appointments(id)
 );
 
 create table MedicalAid (
@@ -99,6 +97,6 @@ create table PatientBillingDetails (
 create table Payment (
 	id integer primary key,
 	patientId integer not null,
-	amount decimal not null
-	time date not null,
+	amount decimal not null,
+	time date not null
 );
