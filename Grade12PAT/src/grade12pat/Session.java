@@ -62,6 +62,9 @@ public class Session  {
         mainScreen.addTab("Add Appointments", new AddAppointmentPanel());
     }
     
+    public void showRecordPayment() {
+        mainScreen.addTab("Record Payment", new ReceivePaymentPanel());
+    }
     public void addNewPatient() {
        mainScreen.addTab("Add Patient", new AddPatientPanel(this));
     }

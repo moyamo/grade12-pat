@@ -55,6 +55,11 @@ public class MainScreen extends javax.swing.JFrame {
         });
 
         jButton3.setText("Record Payment");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Modify Billing Items");
 
@@ -118,6 +123,10 @@ public class MainScreen extends javax.swing.JFrame {
         // TODO Dialog to choose patient
         session.addNewPatient();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        session.showRecordPayment();
+    }//GEN-LAST:event_jButton3ActionPerformed
     protected void addTab(String title, JPanel panel) {
         tabbedPane.addTab(title, panel);
         tabbedPane.setSelectedComponent(panel);
