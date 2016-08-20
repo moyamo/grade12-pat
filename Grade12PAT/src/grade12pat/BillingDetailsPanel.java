@@ -10,12 +10,13 @@ package grade12pat;
  * @author yaseen
  */
 public class BillingDetailsPanel extends javax.swing.JPanel {
-
+    private Session session;
     /**
      * Creates new form BillingDetailsPanel
      */
-    public BillingDetailsPanel() {
+    public BillingDetailsPanel(Session session) {
         initComponents();
+        this.session = session;
     }
 
     /**
@@ -143,6 +144,7 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
 
     private void cmbPaymentMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPaymentMethodActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_cmbPaymentMethodActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -161,7 +163,7 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        session.showEditMedicalAid();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

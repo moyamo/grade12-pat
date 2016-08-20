@@ -84,7 +84,7 @@ public class Session  {
     }
     
     public void showViewBillingDetails(RcdPatient patient) {
-        mainScreen.addTab("Edit Billing Details", new BillingDetailsPanel());
+        mainScreen.addTab("Edit Billing Details", new BillingDetailsPanel(this));
     }
     
     public void showBillPatient(RcdAppointments appointment) {
@@ -148,6 +148,10 @@ public class Session  {
         disposeIfNotNull();
         activeFrame = new MedicalHistory(patient, this);
         activeFrame.setVisible(true);
+    }
+
+    void showEditMedicalAid() {
+        this.mainScreen.addTab("Medical Aid Details", new MedicalAidPlan());
     }
 
    
