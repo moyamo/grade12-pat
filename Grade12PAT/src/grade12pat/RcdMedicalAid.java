@@ -6,7 +6,7 @@
 package grade12pat;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,9 +48,9 @@ public class RcdMedicalAid implements Serializable {
     @Column(name = "EMAILADDRESS")
     private String emailaddress;
     @OneToMany(mappedBy = "medicalaidplanid")
-    private Collection<RcdPatientBillingDetails> rcdPatientBillingDetailsCollection;
+    private List<RcdPatientBillingDetails> rcdPatientBillingDetailsList;
     @OneToMany(mappedBy = "medicalaidid")
-    private Collection<RcdMedicalAidPlan> rcdMedicalAidPlanCollection;
+    private List<RcdMedicalAidPlan> rcdMedicalAidPlanList;
 
     public RcdMedicalAid() {
     }
@@ -100,21 +100,21 @@ public class RcdMedicalAid implements Serializable {
     }
 
     @XmlTransient
-    public Collection<RcdPatientBillingDetails> getRcdPatientBillingDetailsCollection() {
-        return rcdPatientBillingDetailsCollection;
+    public List<RcdPatientBillingDetails> getRcdPatientBillingDetailsList() {
+        return rcdPatientBillingDetailsList;
     }
 
-    public void setRcdPatientBillingDetailsCollection(Collection<RcdPatientBillingDetails> rcdPatientBillingDetailsCollection) {
-        this.rcdPatientBillingDetailsCollection = rcdPatientBillingDetailsCollection;
+    public void setRcdPatientBillingDetailsList(List<RcdPatientBillingDetails> rcdPatientBillingDetailsList) {
+        this.rcdPatientBillingDetailsList = rcdPatientBillingDetailsList;
     }
 
     @XmlTransient
-    public Collection<RcdMedicalAidPlan> getRcdMedicalAidPlanCollection() {
-        return rcdMedicalAidPlanCollection;
+    public List<RcdMedicalAidPlan> getRcdMedicalAidPlanList() {
+        return rcdMedicalAidPlanList;
     }
 
-    public void setRcdMedicalAidPlanCollection(Collection<RcdMedicalAidPlan> rcdMedicalAidPlanCollection) {
-        this.rcdMedicalAidPlanCollection = rcdMedicalAidPlanCollection;
+    public void setRcdMedicalAidPlanList(List<RcdMedicalAidPlan> rcdMedicalAidPlanList) {
+        this.rcdMedicalAidPlanList = rcdMedicalAidPlanList;
     }
 
     @Override

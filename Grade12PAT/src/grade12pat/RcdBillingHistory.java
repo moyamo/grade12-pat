@@ -6,7 +6,6 @@
 package grade12pat;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,8 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -30,10 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "RcdBillingHistory.findAll", query = "SELECT r FROM RcdBillingHistory r"),
     @NamedQuery(name = "RcdBillingHistory.findById", query = "SELECT r FROM RcdBillingHistory r WHERE r.id = :id"),
-    @NamedQuery(name = "RcdBillingHistory.findByEmailaddress", query = "SELECT r FROM RcdBillingHistory r WHERE r.emailaddress = :emailaddress"),
     @NamedQuery(name = "RcdBillingHistory.findByDescription", query = "SELECT r FROM RcdBillingHistory r WHERE r.description = :description"),
-    @NamedQuery(name = "RcdBillingHistory.findByPrice", query = "SELECT r FROM RcdBillingHistory r WHERE r.price = :price"),
-    @NamedQuery(name = "RcdBillingHistory.findByTime", query = "SELECT r FROM RcdBillingHistory r WHERE r.time = :time")})
+    @NamedQuery(name = "RcdBillingHistory.findByPrice", query = "SELECT r FROM RcdBillingHistory r WHERE r.price = :price")})
 public class RcdBillingHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,23 +36,15 @@ public class RcdBillingHistory implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Column(name = "EMAILADDRESS")
-    private String emailaddress;
     @Basic(optional = false)
     @Column(name = "DESCRIPTION")
     private String description;
     @Basic(optional = false)
     @Column(name = "PRICE")
     private int price;
-    @Column(name = "TIME")
-    @Temporal(TemporalType.DATE)
-    private Date time;
-    @JoinColumn(name = "CONSULTATIONID", referencedColumnName = "ID")
+    @JoinColumn(name = "APPOINTMENTID", referencedColumnName = "ID")
     @ManyToOne
-    private RcdAppointments consultationid;
-    @JoinColumn(name = "PATIENTID", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
-    private RcdPatient patientid;
+    private RcdAppointments appointmentid;
 
     public RcdBillingHistory() {
     }
@@ -80,14 +67,6 @@ public class RcdBillingHistory implements Serializable {
         this.id = id;
     }
 
-    public String getEmailaddress() {
-        return emailaddress;
-    }
-
-    public void setEmailaddress(String emailaddress) {
-        this.emailaddress = emailaddress;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -104,28 +83,12 @@ public class RcdBillingHistory implements Serializable {
         this.price = price;
     }
 
-    public Date getTime() {
-        return time;
+    public RcdAppointments getAppointmentid() {
+        return appointmentid;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    public RcdAppointments getConsultationid() {
-        return consultationid;
-    }
-
-    public void setConsultationid(RcdAppointments consultationid) {
-        this.consultationid = consultationid;
-    }
-
-    public RcdPatient getPatientid() {
-        return patientid;
-    }
-
-    public void setPatientid(RcdPatient patientid) {
-        this.patientid = patientid;
+    public void setAppointmentid(RcdAppointments appointmentid) {
+        this.appointmentid = appointmentid;
     }
 
     @Override

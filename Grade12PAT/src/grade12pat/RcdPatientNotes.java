@@ -6,6 +6,7 @@
 package grade12pat;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -23,13 +26,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author yaseen
  */
 @Entity
-@Table(name = "PATIENTFILEATTACHMENTS")
+@Table(name = "PATIENTNOTES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RcdPatientFileAttachments.findAll", query = "SELECT r FROM RcdPatientFileAttachments r"),
-    @NamedQuery(name = "RcdPatientFileAttachments.findById", query = "SELECT r FROM RcdPatientFileAttachments r WHERE r.id = :id"),
-    @NamedQuery(name = "RcdPatientFileAttachments.findByFilename", query = "SELECT r FROM RcdPatientFileAttachments r WHERE r.filename = :filename")})
-public class RcdPatientFileAttachments implements Serializable {
+    @NamedQuery(name = "RcdPatientNotes.findAll", query = "SELECT r FROM RcdPatientNotes r"),
+    @NamedQuery(name = "RcdPatientNotes.findById", query = "SELECT r FROM RcdPatientNotes r WHERE r.id = :id"),
+    @NamedQuery(name = "RcdPatientNotes.findByTime", query = "SELECT r FROM RcdPatientNotes r WHERE r.time = :time")})
+public class RcdPatientNotes implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,26 +41,27 @@ public class RcdPatientFileAttachments implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Lob
-    @Column(name = "FILECONTENTS")
-    private Serializable filecontents;
+    @Column(name = "NOTES")
+    private String notes;
     @Basic(optional = false)
-    @Column(name = "FILENAME")
-    private String filename;
+    @Column(name = "TIME")
+    @Temporal(TemporalType.DATE)
+    private Date time;
     @JoinColumn(name = "PATIENTID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private RcdPatient patientid;
 
-    public RcdPatientFileAttachments() {
+    public RcdPatientNotes() {
     }
 
-    public RcdPatientFileAttachments(Integer id) {
+    public RcdPatientNotes(Integer id) {
         this.id = id;
     }
 
-    public RcdPatientFileAttachments(Integer id, Serializable filecontents, String filename) {
+    public RcdPatientNotes(Integer id, String notes, Date time) {
         this.id = id;
-        this.filecontents = filecontents;
-        this.filename = filename;
+        this.notes = notes;
+        this.time = time;
     }
 
     public Integer getId() {
@@ -68,20 +72,20 @@ public class RcdPatientFileAttachments implements Serializable {
         this.id = id;
     }
 
-    public Serializable getFilecontents() {
-        return filecontents;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setFilecontents(Serializable filecontents) {
-        this.filecontents = filecontents;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
-    public String getFilename() {
-        return filename;
+    public Date getTime() {
+        return time;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public RcdPatient getPatientid() {
@@ -102,10 +106,10 @@ public class RcdPatientFileAttachments implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RcdPatientFileAttachments)) {
+        if (!(object instanceof RcdPatientNotes)) {
             return false;
         }
-        RcdPatientFileAttachments other = (RcdPatientFileAttachments) object;
+        RcdPatientNotes other = (RcdPatientNotes) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -114,7 +118,7 @@ public class RcdPatientFileAttachments implements Serializable {
 
     @Override
     public String toString() {
-        return "grade12pat.RcdPatientFileAttachments[ id=" + id + " ]";
+        return "grade12pat.RcdPatientNotes[ id=" + id + " ]";
     }
     
 }

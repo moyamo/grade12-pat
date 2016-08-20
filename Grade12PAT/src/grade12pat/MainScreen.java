@@ -179,6 +179,7 @@ public class MainScreen extends javax.swing.JFrame {
     protected void setFocus(int i) {
         tabbedPane.setSelectedIndex(i);
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

@@ -13,6 +13,8 @@
     <class>grade12pat.RcdPatientFileAttachments</class>
     <class>grade12pat.RcdPatientMedicalHistory</class>
     <class>grade12pat.RcdPatientReadings</class>
+    <class>grade12pat.RcdPayment</class>
+    <class>grade12pat.RcdPatientNotes</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/Grade12PAT"/>
       <property name="javax.persistence.jdbc.user" value="app"/>

@@ -50,9 +50,9 @@ public class RcdPatientReadings implements Serializable {
     @Column(name = "TIME")
     @Temporal(TemporalType.DATE)
     private Date time;
-    @JoinColumn(name = "MEDICALHISTORYID", referencedColumnName = "ID")
+    @JoinColumn(name = "PATIENTID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private RcdPatientMedicalHistory medicalhistoryid;
+    private RcdPatient patientid;
 
     public RcdPatientReadings() {
     }
@@ -100,12 +100,12 @@ public class RcdPatientReadings implements Serializable {
         this.time = time;
     }
 
-    public RcdPatientMedicalHistory getMedicalhistoryid() {
-        return medicalhistoryid;
+    public RcdPatient getPatientid() {
+        return patientid;
     }
 
-    public void setMedicalhistoryid(RcdPatientMedicalHistory medicalhistoryid) {
-        this.medicalhistoryid = medicalhistoryid;
+    public void setPatientid(RcdPatient patientid) {
+        this.patientid = patientid;
     }
 
     @Override

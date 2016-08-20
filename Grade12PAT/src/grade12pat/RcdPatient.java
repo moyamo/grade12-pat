@@ -6,14 +6,12 @@
 package grade12pat;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -58,17 +56,19 @@ public class RcdPatient implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date birthday;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientid")
-    private Collection<RcdAppointments> rcdAppointmentsCollection;
+    private List<RcdAppointments> rcdAppointmentsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientid")
-    private Collection<RcdPatientMedicalHistory> rcdPatientMedicalHistoryCollection;
+    private List<RcdPatientFileAttachments> rcdPatientFileAttachmentsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientid")
-    private Collection<RcdPatientBillingDetails> rcdPatientBillingDetailsCollection;
+    private List<RcdPatientBillingDetails> rcdPatientBillingDetailsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientid")
-    private Collection<RcdAllergies> rcdAllergiesCollection;
+    private List<RcdPatientReadings> rcdPatientReadingsList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientid")
+    private List<RcdAllergies> rcdAllergiesList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientid")
+    private List<RcdPatientNotes> rcdPatientNotesList;
     @OneToMany(mappedBy = "primarymemberid")
-    private Collection<RcdMedicalAidPlan> rcdMedicalAidPlanCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientid")
-    private Collection<RcdBillingHistory> rcdBillingHistoryCollection;
+    private List<RcdMedicalAidPlan> rcdMedicalAidPlanList;
 
     public RcdPatient() {
     }
@@ -126,57 +126,66 @@ public class RcdPatient implements Serializable {
     }
 
     @XmlTransient
-    public Collection<RcdAppointments> getRcdAppointmentsCollection() {
-        return rcdAppointmentsCollection;
+    public List<RcdAppointments> getRcdAppointmentsList() {
+        return rcdAppointmentsList;
     }
 
-    public void setRcdAppointmentsCollection(Collection<RcdAppointments> rcdAppointmentsCollection) {
-        this.rcdAppointmentsCollection = rcdAppointmentsCollection;
-    }
-
-    @XmlTransient
-    public Collection<RcdPatientMedicalHistory> getRcdPatientMedicalHistoryCollection() {
-        return rcdPatientMedicalHistoryCollection;
-    }
-
-    public void setRcdPatientMedicalHistoryCollection(Collection<RcdPatientMedicalHistory> rcdPatientMedicalHistoryCollection) {
-        this.rcdPatientMedicalHistoryCollection = rcdPatientMedicalHistoryCollection;
+    public void setRcdAppointmentsList(List<RcdAppointments> rcdAppointmentsList) {
+        this.rcdAppointmentsList = rcdAppointmentsList;
     }
 
     @XmlTransient
-    public Collection<RcdPatientBillingDetails> getRcdPatientBillingDetailsCollection() {
-        return rcdPatientBillingDetailsCollection;
+    public List<RcdPatientFileAttachments> getRcdPatientFileAttachmentsList() {
+        return rcdPatientFileAttachmentsList;
     }
 
-    public void setRcdPatientBillingDetailsCollection(Collection<RcdPatientBillingDetails> rcdPatientBillingDetailsCollection) {
-        this.rcdPatientBillingDetailsCollection = rcdPatientBillingDetailsCollection;
-    }
-
-    @XmlTransient
-    public Collection<RcdAllergies> getRcdAllergiesCollection() {
-        return rcdAllergiesCollection;
-    }
-
-    public void setRcdAllergiesCollection(Collection<RcdAllergies> rcdAllergiesCollection) {
-        this.rcdAllergiesCollection = rcdAllergiesCollection;
+    public void setRcdPatientFileAttachmentsList(List<RcdPatientFileAttachments> rcdPatientFileAttachmentsList) {
+        this.rcdPatientFileAttachmentsList = rcdPatientFileAttachmentsList;
     }
 
     @XmlTransient
-    public Collection<RcdMedicalAidPlan> getRcdMedicalAidPlanCollection() {
-        return rcdMedicalAidPlanCollection;
+    public List<RcdPatientBillingDetails> getRcdPatientBillingDetailsList() {
+        return rcdPatientBillingDetailsList;
     }
 
-    public void setRcdMedicalAidPlanCollection(Collection<RcdMedicalAidPlan> rcdMedicalAidPlanCollection) {
-        this.rcdMedicalAidPlanCollection = rcdMedicalAidPlanCollection;
+    public void setRcdPatientBillingDetailsList(List<RcdPatientBillingDetails> rcdPatientBillingDetailsList) {
+        this.rcdPatientBillingDetailsList = rcdPatientBillingDetailsList;
     }
 
     @XmlTransient
-    public Collection<RcdBillingHistory> getRcdBillingHistoryCollection() {
-        return rcdBillingHistoryCollection;
+    public List<RcdPatientReadings> getRcdPatientReadingsList() {
+        return rcdPatientReadingsList;
     }
 
-    public void setRcdBillingHistoryCollection(Collection<RcdBillingHistory> rcdBillingHistoryCollection) {
-        this.rcdBillingHistoryCollection = rcdBillingHistoryCollection;
+    public void setRcdPatientReadingsList(List<RcdPatientReadings> rcdPatientReadingsList) {
+        this.rcdPatientReadingsList = rcdPatientReadingsList;
+    }
+
+    @XmlTransient
+    public List<RcdAllergies> getRcdAllergiesList() {
+        return rcdAllergiesList;
+    }
+
+    public void setRcdAllergiesList(List<RcdAllergies> rcdAllergiesList) {
+        this.rcdAllergiesList = rcdAllergiesList;
+    }
+
+    @XmlTransient
+    public List<RcdPatientNotes> getRcdPatientNotesList() {
+        return rcdPatientNotesList;
+    }
+
+    public void setRcdPatientNotesList(List<RcdPatientNotes> rcdPatientNotesList) {
+        this.rcdPatientNotesList = rcdPatientNotesList;
+    }
+
+    @XmlTransient
+    public List<RcdMedicalAidPlan> getRcdMedicalAidPlanList() {
+        return rcdMedicalAidPlanList;
+    }
+
+    public void setRcdMedicalAidPlanList(List<RcdMedicalAidPlan> rcdMedicalAidPlanList) {
+        this.rcdMedicalAidPlanList = rcdMedicalAidPlanList;
     }
 
     @Override

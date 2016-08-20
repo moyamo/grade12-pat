@@ -6,8 +6,8 @@
 package grade12pat;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,8 +52,8 @@ public class RcdAppointments implements Serializable {
     @JoinColumn(name = "PATIENTID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private RcdPatient patientid;
-    @OneToMany(mappedBy = "consultationid")
-    private Collection<RcdBillingHistory> rcdBillingHistoryCollection;
+    @OneToMany(mappedBy = "appointmentid")
+    private List<RcdBillingHistory> rcdBillingHistoryList;
 
     public RcdAppointments() {
     }
@@ -101,12 +101,12 @@ public class RcdAppointments implements Serializable {
     }
 
     @XmlTransient
-    public Collection<RcdBillingHistory> getRcdBillingHistoryCollection() {
-        return rcdBillingHistoryCollection;
+    public List<RcdBillingHistory> getRcdBillingHistoryList() {
+        return rcdBillingHistoryList;
     }
 
-    public void setRcdBillingHistoryCollection(Collection<RcdBillingHistory> rcdBillingHistoryCollection) {
-        this.rcdBillingHistoryCollection = rcdBillingHistoryCollection;
+    public void setRcdBillingHistoryList(List<RcdBillingHistory> rcdBillingHistoryList) {
+        this.rcdBillingHistoryList = rcdBillingHistoryList;
     }
 
     @Override
