@@ -14,13 +14,15 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.PopupMenuListener;
 
 /**
  *
  * @author yaseen
  */
-public class PatientTextField extends JTextField implements KeyListener {
+public class PatientTextField extends JTextField implements DocumentListener {
     private List<RcdPatient> patients;
     private JPopupMenu popup;
     private RcdPatient selectedPatient;
@@ -29,7 +31,7 @@ public class PatientTextField extends JTextField implements KeyListener {
     
     public PatientTextField() {
         super();
-        addKeyListener(this);
+        getDocument().addDocumentListener(this);
         popup = new JPopupMenu();
     }
     
@@ -59,17 +61,16 @@ public class PatientTextField extends JTextField implements KeyListener {
         for (int i = 0; i < substring.length(); ++i) {
             regex += substring.charAt(i) + ".*";
         }
-        return superstring.matches(substring);
+        return superstring.matches(regex);
     }
     
-    @Override
-    public void keyTyped(KeyEvent e) {
+    public void popupThing() {
         refreshList();
         popup.setVisible(false);
         popup.removeAll();
         ArrayList<RcdPatient> filter = new ArrayList<RcdPatient>();
         for (int i = 0; i < patients.size(); ++i) {
-            if (fuzzyMatch(patients.get(i).toString(), getText())) {
+            if (fuzzyMatch(getText(), patients.get(i).toString())) {
                 filter.add(patients.get(i));
             }
         }
@@ -101,9 +102,18 @@ public class PatientTextField extends JTextField implements KeyListener {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {}
+    public void insertUpdate(DocumentEvent e) {
+        popupThing();
+    }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void removeUpdate(DocumentEvent e) {
+        popupThing();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        popupThing();
+    }
     
 }

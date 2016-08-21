@@ -38,13 +38,7 @@ public class MedicalHistory extends javax.swing.JFrame {
         } catch (NoSuchElementException e) {
             EntityManager em = this.session.getEntityManager();
             em.getTransaction().begin();
-//            this.medicalHistory = new RcdPatientMedicalHistory(session.nextId("PatientMedicalHistory"));
-//            this.medicalHistory.setRcdPatientFileAttachmentsCollection(new Vector());
-//            this.medicalHistory.setRcdPatientReadingsCollection(new Vector());
-//            this.medicalHistory.setNotes("");
-//            this.medicalHistory.setPatientid(this.patient);
-//            this.patient.getRcdPatientMedicalHistoryCollection().add(this.medicalHistory);
-//            em.persist(this.medicalHistory);
+//          em.persist(this.medicalHistory);
             em.getTransaction().commit();
             
         }
