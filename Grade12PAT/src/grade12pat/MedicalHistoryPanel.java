@@ -5,18 +5,56 @@
  */
 package grade12pat;
 
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author yaseen
  */
 public class MedicalHistoryPanel extends javax.swing.JPanel {
+
     Session session;
+    RcdPatient patient;
+    List<RcdPatientFileAttachments> fileAttachements;
+
     /**
      * Creates new form MedicalHistoryPanel
      */
-    public MedicalHistoryPanel(Session session) {
+    public MedicalHistoryPanel(Session session, RcdPatient patient) {
         initComponents();
         this.session = session;
+        tblAllergies.setModel(new AllergyTableModel(session, patient));
+        tblNotes.setModel(new NotesTableModel(session, patient));
+        tblReadings.setModel(new ReadingTableModel(session, patient));
+        this.patient = patient;
+        fillInformation();
+    }
+
+    private void fillInformation() {
+        fileAttachements = session.sqlQuery("SELECT * FROM PatientFileAttachments WHERE patientId = " + patient.getId(), RcdPatientFileAttachments.class);
+        Vector stuff = new Vector();
+        for (RcdPatientFileAttachments pfa : fileAttachements) {
+            stuff.add(pfa.getFilename());
+        }
+        lstFileAttachements.setListData(stuff);
     }
 
     /**
@@ -30,19 +68,19 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblAllergies = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblNotes = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        lstFileAttachements = new javax.swing.JList<>();
         jPanel5 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tblReadings = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -51,7 +89,7 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblAllergies.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
                 {null},
@@ -62,7 +100,7 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
                 "Allergies"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblAllergies);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -75,17 +113,14 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
         );
 
         add(jPanel1);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblNotes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -96,7 +131,7 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
                 "Time", "Note"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblNotes);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -119,16 +154,31 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        lstFileAttachements.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jList1);
+        lstFileAttachements.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstFileAttachementsMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(lstFileAttachements);
 
         jButton1.setText("Add");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Delete");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -176,7 +226,7 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tblReadings.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -187,9 +237,14 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
                 "Type", "Time", "Reading"
             }
         ));
-        jScrollPane4.setViewportView(jTable3);
+        jScrollPane4.setViewportView(tblReadings);
 
         jButton3.setText("View Graph");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Bill Patient");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -239,8 +294,77 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        session.showBillPatient();
+        session.showBillPatient(patient);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        List<String> readings = session.sqlQuery("SELECT readingType from PatientReadings WHERE patientId = " + this.patient.getId() + " GROUP BY readingType");
+        int result = JOptionPane.showOptionDialog(null, "Please choose something to graph",
+                "Graph", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null,
+                readings.toArray(), null);
+        session.showGraph(new ArrayList(this.patient.getRcdPatientReadingsList()), readings.get(result));
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JFileChooser fc = new JFileChooser();
+        int result = fc.showDialog(this, "Import");
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            RcdPatientFileAttachments fileAttachement = new RcdPatientFileAttachments();
+            char[] fileData = new char[(int) file.length()];
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                br.read(fileData);
+                fileAttachement.setFilename(file.getName());
+                fileAttachement.setPatientid(patient);
+                fileAttachement.setFilecontents(fileData);
+                br.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MedicalHistoryPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MedicalHistoryPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            session.getEntityManager().getTransaction().begin();
+            fileAttachement.setId(session.nextId("PatientFileAttachments"));
+            session.getEntityManager().persist(fileAttachement);
+            session.commit();
+            fillInformation();
+
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void lstFileAttachementsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFileAttachementsMouseClicked
+        RcdPatientFileAttachments attach = fileAttachements.get(lstFileAttachements.getSelectedIndex());
+        if (evt.getClickCount() >= 2) {
+            String fileName = attach.getFilename();
+            String[] splitFileName = fileName.split("\\.");
+            System.out.println(fileName);
+            System.out.println(splitFileName[0]);
+            System.out.println(splitFileName[1]);
+            try {
+                File tmp = File.createTempFile(splitFileName[0], splitFileName[splitFileName.length - 1]);
+                BufferedWriter bw = new BufferedWriter(new FileWriter(tmp));
+                bw.write((char[]) attach.getFilecontents());
+                bw.close();
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(tmp);
+            } catch (IOException ex) {
+                Logger.getLogger(MedicalHistoryPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_lstFileAttachementsMouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        RcdPatientFileAttachments attach = fileAttachements.get(lstFileAttachements.getSelectedIndex());
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().remove(attach);
+        session.commit();
+        fillInformation();
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -248,7 +372,6 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -259,8 +382,209 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
+    private javax.swing.JList<String> lstFileAttachements;
+    private javax.swing.JTable tblAllergies;
+    private javax.swing.JTable tblNotes;
+    private javax.swing.JTable tblReadings;
     // End of variables declaration//GEN-END:variables
+}
+
+abstract class BetterTableModel implements TableModel {
+
+    RcdPatient patient;
+    List content;
+    Session session;
+    List<TableModelListener> listeners;
+    String[] headings;
+    String type;
+
+    BetterTableModel(Session session, RcdPatient patient, String[] headings, String type) {
+        this.patient = patient;
+        this.session = session;
+        listeners = new ArrayList<TableModelListener>();
+        this.headings = headings;
+        this.type = type;
+    }
+
+    @Override
+    public int getRowCount() {
+        return content.size() + 1;
+    }
+
+    @Override
+    public int getColumnCount() {
+        return headings.length;
+    }
+
+    @Override
+    public String getColumnName(int columnIndex) {
+        return headings[columnIndex];
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return String.class;
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        if (rowIndex < content.size()) {
+            return getRegularValueAt(rowIndex, columnIndex);
+        } else if (columnIndex < getColumnCount() - 1) {
+            return "";
+        } else {
+            return "Add new " + type;
+        }
+    }
+
+    abstract public Object getRegularValueAt(int r, int c);
+
+    @Override
+    public void addTableModelListener(TableModelListener l) {
+        listeners.add(l);
+    }
+
+    @Override
+    public void removeTableModelListener(TableModelListener l) {
+        listeners.remove(l);
+    }
+
+    void notifyListeners() {
+        for (TableModelListener l : listeners) {
+            l.tableChanged(new TableModelEvent(this));
+        }
+    }
+}
+
+class AllergyTableModel extends BetterTableModel {
+
+    static String[] headings = {"Allergies"};
+
+    public AllergyTableModel(Session session, RcdPatient patient) {
+        super(session, patient, headings, "Allergy");
+        content = session.sqlQuery("SELECT * FROM allergies WHERE patientId = " + patient.getId(), RcdAllergies.class);
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        RcdAllergies allergy;
+        if (rowIndex < content.size()) {
+            allergy = (RcdAllergies) content.get(rowIndex);
+        } else {
+            allergy = new RcdAllergies(session.nextId("Allergies"));
+            allergy.setPatientid(patient);
+            content.add(allergy);
+        }
+        allergy.setAllergytype((String) aValue);
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().persist(allergy);
+        session.commit();
+        notifyListeners();
+    }
+
+    @Override
+    public Object getRegularValueAt(int r, int c) {
+        return ((RcdAllergies) content.get(r)).getAllergytype();
+    }
+}
+
+class NotesTableModel extends BetterTableModel {
+
+    static String[] headings = {"Time", "Notes"};
+
+    public NotesTableModel(Session session, RcdPatient patient) {
+        super(session, patient, headings, "Note");
+        content = session.sqlQuery("SELECT * FROM PatientNotes WHERE patientId = " + patient.getId(), RcdPatientNotes.class);
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        RcdPatientNotes note;
+        if (rowIndex < content.size()) {
+            note = (RcdPatientNotes) content.get(rowIndex);
+        } else {
+            note = new RcdPatientNotes(session.nextId("Allergies"));
+            note.setPatientid(patient);
+            note.setTime(new Date());
+            note.setNotes("");
+            content.add(note);
+        }
+        if (columnIndex == 1) {
+            note.setNotes((String) aValue);
+        }
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().persist(note);
+        session.commit();
+        notifyListeners();
+    }
+
+    @Override
+    public boolean isCellEditable(int r, int c) {
+        return c > 0;
+    }
+
+    @Override
+    public Object getRegularValueAt(int r, int c) {
+        RcdPatientNotes note = ((RcdPatientNotes) content.get(r));
+        if (c == 0) {
+            return note.getTime();
+        } else {
+            return note.getNotes();
+        }
+    }
+}
+
+class ReadingTableModel extends BetterTableModel {
+
+    static String[] headings = {"Time", "Type", "Reading"};
+
+    public ReadingTableModel(Session session, RcdPatient patient) {
+        super(session, patient, headings, "Reading");
+        this.content = session.sqlQuery("SELECT * FROM PatientReadings WHERE patientId = " + patient.getId(), RcdPatientReadings.class);
+    }
+
+    @Override
+    public Object getRegularValueAt(int r, int c) {
+        RcdPatientReadings reading = ((RcdPatientReadings) content.get(r));
+        if (c == 0) {
+            return reading.getTime();
+        } else if (c == 1) {
+            return reading.getReadingtype();
+        } else {
+            return reading.getReading();
+        }
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        RcdPatientReadings readings;
+        if (rowIndex < content.size()) {
+            readings = (RcdPatientReadings) content.get(rowIndex);
+        } else {
+            readings = new RcdPatientReadings(session.nextId("PatientReadings"));
+            readings.setPatientid(patient);
+            readings.setTime(new Date());
+            readings.setReading(0);
+            readings.setReadingtype("");
+            content.add(readings);
+        }
+
+        if (columnIndex == 1) {
+            readings.setReadingtype((String) aValue);
+        } else {
+            try {
+                readings.setReading(Double.parseDouble((String) aValue));
+            } catch (NumberFormatException e) {
+            };
+        }
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().persist(readings);
+        session.commit();
+        notifyListeners();
+    }
 }

@@ -14,8 +14,9 @@ public class BillPatientPanel extends javax.swing.JPanel {
     /**
      * Creates new form BillPatientPanel
      */
-    public BillPatientPanel() {
+    public BillPatientPanel(Session session, RcdPatient patient) {
         initComponents();
+        RcdPatient patient;
     }
 
     /**

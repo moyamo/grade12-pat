@@ -97,8 +97,8 @@ public class Session  {
         mainScreen.addTab("Edit Billing Details", new BillingDetailsPanel(this, details));
     }
     
-    public void showBillPatient() {
-        mainScreen.addTab("Bill patient", new BillPatientPanel());
+    public void showBillPatient(RcdPatient patient) {
+        mainScreen.addTab("Bill patient", new BillPatientPanel(this, patient));
     }
     
     public void showBillingItems() {
@@ -185,13 +185,13 @@ public class Session  {
         return work;
     }
 
-    void showViewMedicalHistory() {
+    void showViewMedicalHistory(RcdPatient patient) {
         JPanel wrapper = new JPanel();
         JScrollPane scroll = new JScrollPane();
-        scroll.setViewportView(new MedicalHistoryPanel(this));
+        scroll.setViewportView(new MedicalHistoryPanel(this, patient));
         wrapper.setLayout(new GridLayout(1, 1));
         wrapper.add(scroll);
-        mainScreen.addTab("Medical History", wrapper);
+        mainScreen.addTab("Medical History of " + patient.toString(), wrapper);
     }
 
     void showEditMedicalAid(RcdMedicalAidPlan plan) {
