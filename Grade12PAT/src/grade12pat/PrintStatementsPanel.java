@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Message;
@@ -29,11 +30,26 @@ import javax.swing.text.rtf.RTFEditorKit;
  */
 public class PrintStatementsPanel extends javax.swing.JPanel {
 
+    Session session;
+    List<RcdPatient> patients;
+
     /**
      * Creates new form PrintStatementsPanel
      */
-    public PrintStatementsPanel() {
+    public PrintStatementsPanel(Session session) {
         initComponents();
+        this.session = session;
+        fillList();
+    }
+
+    private void fillList() {
+        patients = session.sqlQuery("SELECT * FROM patient", RcdPatient.class);
+        String[] names = new String[patients.size()];
+        for (int i = 0; i < names.length; ++i) {
+            RcdPatient p = patients.get(i);
+            names[i] = p.getFirstnames() + " " + p.getSurname();
+        }
+        lstPatients.setListData(names);
     }
 
     /**
@@ -156,7 +172,7 @@ public class PrintStatementsPanel extends javax.swing.JPanel {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress("yaseenmowzer@gmail.com"));
             message.setSubject("Test");
             BufferedReader br = new BufferedReader(new FileReader("account-statement.rtf"));
-            char[] rtfDocument = new char[(int)new File("account-statement.rtf").length()];
+            char[] rtfDocument = new char[(int) new File("account-statement.rtf").length()];
             br.read(rtfDocument);
             br.close();
             message.setContent(rtfDocument, "application/rtf");

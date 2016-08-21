@@ -33,17 +33,19 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
 
     Session session;
     RcdPatient patient;
+    RcdAppointments appointment;
     List<RcdPatientFileAttachments> fileAttachements;
 
     /**
      * Creates new form MedicalHistoryPanel
      */
-    public MedicalHistoryPanel(Session session, RcdPatient patient) {
+    public MedicalHistoryPanel(Session session, RcdPatient patient, RcdAppointments appointment) {
         initComponents();
         this.session = session;
         tblAllergies.setModel(new AllergyTableModel(session, patient));
         tblNotes.setModel(new NotesTableModel(session, patient));
         tblReadings.setModel(new ReadingTableModel(session, patient));
+        this.appointment = appointment;
         this.patient = patient;
         fillInformation();
     }
@@ -294,7 +296,7 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        session.showBillPatient(patient);
+        session.showBillPatient(appointment);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

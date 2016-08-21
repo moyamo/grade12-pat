@@ -113,7 +113,7 @@ public class RcdBillingHistory implements Serializable {
 
     @Override
     public String toString() {
-        return "grade12pat.RcdBillingHistory[ id=" + id + " ]";
+        return getDescription() + " (R " + getPrice() + ")";
     }
     
 }

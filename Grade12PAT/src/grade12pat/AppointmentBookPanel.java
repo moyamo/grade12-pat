@@ -168,7 +168,7 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
     private void tblAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAppointmentsMouseClicked
         // TODO prevent secretary from using this.
         if (evt.getClickCount() >= 2) {
-            session.showViewMedicalHistory(appointments.get(tblAppointments.getSelectedRow()).getPatientid());
+            session.showViewMedicalHistory(appointments.get(tblAppointments.getSelectedRow()));
         }
     }//GEN-LAST:event_tblAppointmentsMouseClicked
 

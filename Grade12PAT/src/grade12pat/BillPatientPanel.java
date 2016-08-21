@@ -5,18 +5,43 @@
  */
 package grade12pat;
 
+import java.util.List;
+import java.util.Vector;
+
 /**
  *
  * @author yaseen
  */
 public class BillPatientPanel extends javax.swing.JPanel {
 
+    RcdAppointments appointment;
+    Session session;
+    List<RcdBillingItems> bills;
+
     /**
      * Creates new form BillPatientPanel
      */
-    public BillPatientPanel(Session session, RcdPatient patient) {
+    public BillPatientPanel(Session session, RcdAppointments appointment) {
         initComponents();
-        RcdPatient patient;
+        this.session = session;
+        this.appointment = appointment;
+        fillInformation();
+    }
+
+    private void fillInformation() {
+        cmbBillingItem.removeAllItems();
+        bills = session.sqlQuery("SELECT * FROM BillingItems", RcdBillingItems.class);
+        for (RcdBillingItems b : bills) {
+            cmbBillingItem.addItem(b.getDescription() + " R" + b.getPrice());
+        }
+        Vector accrued = new Vector();
+        double total = 0.0;
+        for (RcdBillingHistory bh : appointment.getRcdBillingHistoryList()) {
+            accrued.add(bh.toString());
+            total += bh.getPrice();
+        }
+        lstBills.setListData(accrued);
+        lblTotal.setText("R " + total);
     }
 
     /**
@@ -35,6 +60,7 @@ public class BillPatientPanel extends javax.swing.JPanel {
         lstBills = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        lblTotal = new javax.swing.JLabel();
 
         jButton2.setText("Delete");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -63,6 +89,8 @@ public class BillPatientPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Total");
 
+        lblTotal.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,6 +110,8 @@ public class BillPatientPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblTotal)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE))
                 .addContainerGap())
@@ -102,34 +132,34 @@ public class BillPatientPanel extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton1)
                         .addComponent(jButton2))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(lblTotal)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 //
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//            session.showAppointments();
+        RcdBillingHistory b = appointment.getRcdBillingHistoryList().get(lstBills.getSelectedIndex());
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().remove(b);
+        session.getEntityManager().getTransaction().commit();
+        session.getEntityManager().refresh(appointment);
+        fillInformation();
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        String selected = (String) cmbBillingItem.getSelectedItem();
-//        List<RcdBillingItems> bills = session.sqlQuery("SELECT * FROM BillingItems", RcdBillingItems.class);
-//        for (RcdBillingItems b: bills) {
-//            if (selected.equals(b.getDescription() + " R" + b.getPrice())) {
-//                session.getEntityManager().getTransaction().begin();
-//                RcdBillingHistory bh = new RcdBillingHistory(session.nextId("BillingHistory"));
-//                bh.setConsultationid(this.appointment);
-//                bh.setDescription(b.getDescription());
-//                bh.setPrice(b.getPrice());
-//                bh.setPatientid(appointment.getPatientid());
-//                bh.setTime(appointment.getTime());
-//                session.getEntityManager().persist(bh);
-//                session.getEntityManager().getTransaction().commit();
-//                break;
-//            }
-//        }
-//        session.getEntityManager().refresh(appointment);
-//        fillInformation();
+        RcdBillingItems b = bills.get(cmbBillingItem.getSelectedIndex());
+        session.getEntityManager().getTransaction().begin();
+        RcdBillingHistory bh = new RcdBillingHistory(session.nextId("BillingHistory"));
+        bh.setAppointmentid(this.appointment);
+        bh.setDescription(b.getDescription());
+        bh.setPrice(b.getPrice());
+        session.getEntityManager().persist(bh);
+        session.getEntityManager().getTransaction().commit();
+        session.getEntityManager().refresh(appointment);
+        fillInformation();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
@@ -140,6 +170,7 @@ public class BillPatientPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTotal;
     private javax.swing.JList<String> lstBills;
     // End of variables declaration//GEN-END:variables
 }
