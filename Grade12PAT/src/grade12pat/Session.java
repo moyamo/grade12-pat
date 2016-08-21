@@ -195,7 +195,7 @@ public class Session  {
     }
 
     void showEditMedicalAid(RcdMedicalAidPlan plan) {
-        this.mainScreen.addTab("Medical Aid Details", new MedicalAidPlan(plan));
+        this.mainScreen.addTab("Medical Aid Details", new MedicalAidPlan(this, plan));
     }
 
    

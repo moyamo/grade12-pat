@@ -5,17 +5,44 @@
  */
 package grade12pat;
 
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+
 /**
  *
  * @author yaseen
  */
 public class MedicalAidPlan extends javax.swing.JPanel {
-
+    RcdMedicalAidPlan plan;
+    List<RcdMedicalAid> medicalAids;
+    Session session;
     /**
      * Creates new form MedicalAidPlan
      */
-    public MedicalAidPlan(RcdMedicalAidPlan plan) {
+    public MedicalAidPlan(Session session, RcdMedicalAidPlan plan) {
         initComponents();
+        if (plan == null) {
+            plan = new RcdMedicalAidPlan();
+        }
+        this.plan = plan;
+        this.session = session;
+        txfMember.setSession(session);
+        fillInformation();
+    }
+    
+    private void fillInformation() {
+        medicalAids = session.sqlQuery("SELECT * FROM MEDICALAID", RcdMedicalAid.class);
+        String stuff[] = new String[medicalAids.size()];
+        for (int i = 0; i < stuff.length; ++i) {
+            stuff[i] = medicalAids.get(i).getName();
+        }
+        cmbMedicalAid.setModel(new DefaultComboBoxModel<String>(stuff));
+        if (plan.getMedicalaidid() != null) {
+            cmbMedicalAid.setSelectedItem(plan.getMedicalaidid().getName());
+        }
+        txfMedicalAidNumber.setText(plan.getMedicalaidnumber());
+        txfMember.setSelectedPatient(plan.getPrimarymemberid());
+        txfMember.setActive();
     }
 
     /**
@@ -28,26 +55,32 @@ public class MedicalAidPlan extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbMedicalAid = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txfMedicalAidNumber = new javax.swing.JTextField();
+        txfMember = new grade12pat.PatientTextField();
 
         jLabel1.setText("Medical Aid");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbMedicalAid.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbMedicalAid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbMedicalAidActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Medical Aid Number");
 
         jLabel3.setText("Name of Member");
 
         jButton1.setText("Save");
-
-        jTextField1.setText("jTextField1");
-
-        jTextField2.setText("jTextField2");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -62,9 +95,9 @@ public class MedicalAidPlan extends javax.swing.JPanel {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                    .addComponent(jTextField2))
+                    .addComponent(cmbMedicalAid, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txfMedicalAidNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                    .addComponent(txfMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -73,29 +106,44 @@ public class MedicalAidPlan extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbMedicalAid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txfMedicalAidNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txfMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addContainerGap(147, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmbMedicalAidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMedicalAidActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbMedicalAidActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        plan.setMedicalaidid(medicalAids.get(cmbMedicalAid.getSelectedIndex()));
+        plan.setMedicalaidnumber(txfMedicalAidNumber.getText());
+        plan.setPrimarymemberid(txfMember.getSelectedPatient());
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().persist(plan);
+        if (session.commit()) {
+            session.closeTab();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cmbMedicalAid;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField txfMedicalAidNumber;
+    private grade12pat.PatientTextField txfMember;
     // End of variables declaration//GEN-END:variables
 }
