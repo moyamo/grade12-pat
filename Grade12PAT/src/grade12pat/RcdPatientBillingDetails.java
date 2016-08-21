@@ -45,7 +45,7 @@ public class RcdPatientBillingDetails implements Serializable {
     private String paymentmethod;
     @JoinColumn(name = "MEDICALAIDPLANID", referencedColumnName = "ID")
     @ManyToOne
-    private RcdMedicalAid medicalaidplanid;
+    private RcdMedicalAidPlan medicalaidplanid;
     @JoinColumn(name = "PATIENTID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private RcdPatient patientid;
@@ -89,11 +89,11 @@ public class RcdPatientBillingDetails implements Serializable {
         this.paymentmethod = paymentmethod;
     }
 
-    public RcdMedicalAid getMedicalaidplanid() {
+    public RcdMedicalAidPlan getMedicalaidplanid() {
         return medicalaidplanid;
     }
 
-    public void setMedicalaidplanid(RcdMedicalAid medicalaidplanid) {
+    public void setMedicalaidplanid(RcdMedicalAidPlan medicalaidplanid) {
         this.medicalaidplanid = medicalaidplanid;
     }
 

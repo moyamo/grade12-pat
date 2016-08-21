@@ -6,6 +6,7 @@
 package grade12pat;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,6 +40,8 @@ public class RcdMedicalAidPlan implements Serializable {
     private Integer id;
     @Column(name = "MEDICALAIDNUMBER")
     private String medicalaidnumber;
+    @OneToMany(mappedBy = "medicalaidplanid")
+    private List<RcdPatientBillingDetails> rcdPatientBillingDetailsList;
     @JoinColumn(name = "MEDICALAIDID", referencedColumnName = "ID")
     @ManyToOne
     private RcdMedicalAid medicalaidid;
@@ -65,6 +70,15 @@ public class RcdMedicalAidPlan implements Serializable {
 
     public void setMedicalaidnumber(String medicalaidnumber) {
         this.medicalaidnumber = medicalaidnumber;
+    }
+
+    @XmlTransient
+    public List<RcdPatientBillingDetails> getRcdPatientBillingDetailsList() {
+        return rcdPatientBillingDetailsList;
+    }
+
+    public void setRcdPatientBillingDetailsList(List<RcdPatientBillingDetails> rcdPatientBillingDetailsList) {
+        this.rcdPatientBillingDetailsList = rcdPatientBillingDetailsList;
     }
 
     public RcdMedicalAid getMedicalaidid() {

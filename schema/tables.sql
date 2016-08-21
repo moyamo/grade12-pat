@@ -91,7 +91,7 @@ create table PatientBillingDetails (
 	medicalAidPlanId integer,
 	paymentMethod VARCHAR(10),
 	foreign key (patientId) references Patient(id),
-	foreign key (medicalAidPlanId) references MedicalAid(id)
+	foreign key (medicalAidPlanId) references MedicalAidPlan(id)
 );
 
 create table Payment (

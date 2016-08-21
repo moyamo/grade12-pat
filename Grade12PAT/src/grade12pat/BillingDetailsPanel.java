@@ -5,18 +5,39 @@
  */
 package grade12pat;
 
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import javax.persistence.EntityManager;
+
 /**
  *
  * @author yaseen
  */
 public class BillingDetailsPanel extends javax.swing.JPanel {
+
     private Session session;
+    private RcdPatientBillingDetails details;
+
     /**
      * Creates new form BillingDetailsPanel
      */
-    public BillingDetailsPanel(Session session) {
+    public BillingDetailsPanel(Session session, RcdPatientBillingDetails details) {
         initComponents();
         this.session = session;
+        txfMember.setSession(session);
+        this.details = details;
+        fillInformation();
+    }
+
+    private void fillInformation() {
+        txfEmailAddress.setText(details.getEmailaddress());
+        txaHomeAddress.setText(details.getHomeaddress());
+        cmbPaymentMethod.setSelectedIndex(details.getPaymentmethod().equals("MEDICALAID") ? 0 : 1);
+        if (details.getMedicalaidplanid() != null) {
+            txfMember.setSelectedPatient(details.getMedicalaidplanid().getPrimarymemberid());
+        }
+        txfMember.setActive();
+
     }
 
     /**
@@ -29,7 +50,6 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         cmbPaymentMethod = new javax.swing.JComboBox<>();
-        lblPatientName = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -39,8 +59,8 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         txaHomeAddress = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        txfMember = new grade12pat.PatientTextField();
 
         cmbPaymentMethod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medical Aid", "Cash" }));
         cmbPaymentMethod.addActionListener(new java.awt.event.ActionListener() {
@@ -48,8 +68,6 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
                 cmbPaymentMethodActionPerformed(evt);
             }
         });
-
-        lblPatientName.setText("Patient Name");
 
         jButton2.setText("Save");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -77,8 +95,6 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Name of Member");
 
-        jTextField1.setText("jTextField1");
-
         jLabel5.setText("or");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -88,6 +104,18 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel2)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addGap(18, 18, 18)
+                            .addComponent(cmbPaymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addGap(25, 25, 25)
+                            .addComponent(txfEmailAddress))
+                        .addComponent(jScrollPane1))
+                    .addComponent(jButton2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
@@ -95,28 +123,13 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel2)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addGap(18, 18, 18)
-                            .addComponent(cmbPaymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(lblPatientName)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(25, 25, 25)
-                            .addComponent(txfEmailAddress))
-                        .addComponent(jScrollPane1))
-                    .addComponent(jButton2))
+                            .addComponent(txfMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(155, 155, 155))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblPatientName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txfEmailAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -131,7 +144,7 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txfMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -144,26 +157,51 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
 
     private void cmbPaymentMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPaymentMethodActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_cmbPaymentMethodActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//        details.setEmailaddress(txfEmailAddress.getText());
-//        details.setHomeaddress(txaHomeAddress.getText());
-//        String paymentMethod = (String) cmbPaymentMethod.getSelectedItem();
-//        if (paymentMethod.equals("Medical Aid"))
-//        details.setPaymentmethod("MEDICALAID");
-//        else if (paymentMethod.equals("Cash"))
-//        details.setPaymentmethod("CASH");
-//        else
-//        throw new RuntimeException("ComboBox selection in BillingDetails was '" + paymentMethod + "' which is invalid");
-//        session.getEntityManager().getTransaction().begin();
-//        session.getEntityManager().persist(details);
-//        session.getEntityManager().getTransaction().commit();
+        details.setEmailaddress(txfEmailAddress.getText());
+        details.setHomeaddress(txaHomeAddress.getText());
+        String paymentMethod = (String) cmbPaymentMethod.getSelectedItem();
+        if (paymentMethod.equals("Medical Aid")) {
+            details.setPaymentmethod("MEDICALAID");
+            RcdPatient member = txfMember.getSelectedPatient();
+            if (member == null) {
+                member = details.getPatientid();
+                txfMember.setSelectedPatient(member);
+            }
+            try {
+                RcdMedicalAidPlan plan = txfMember.getSelectedPatient().getRcdMedicalAidPlanList().iterator().next();
+                details.setMedicalaidplanid(plan);
+            } catch (NoSuchElementException e) {
+                EntityManager em = session.getEntityManager();
+                em.getTransaction().begin();
+                RcdMedicalAidPlan plan = new RcdMedicalAidPlan(session.nextId("MedicalAidPlan"));
+                details.setMedicalaidplanid(plan);
+                if (plan.getRcdPatientBillingDetailsList() == null) {
+                    plan.setRcdPatientBillingDetailsList(new ArrayList());
+                }
+                plan.getRcdPatientBillingDetailsList().add(details);
+                plan.setPrimarymemberid(member);
+                em.persist(plan);
+                em.getTransaction().commit();
+            }
+        } else if (paymentMethod.equals("Cash")) {
+            details.setPaymentmethod("CASH");
+        } else {
+            throw new RuntimeException("ComboBox selection in BillingDetails was '" + paymentMethod + "' which is invalid");
+        }
+
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().persist(details);
+        if (session.commit()) {
+            session.closeTab();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        session.showEditMedicalAid();
+        session.showEditMedicalAid(details.getMedicalaidplanid());
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
@@ -177,9 +215,8 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JLabel lblPatientName;
     private javax.swing.JTextArea txaHomeAddress;
     private javax.swing.JTextField txfEmailAddress;
+    private grade12pat.PatientTextField txfMember;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,7 +14,7 @@ public class MedicalAidPlan extends javax.swing.JPanel {
     /**
      * Creates new form MedicalAidPlan
      */
-    public MedicalAidPlan() {
+    public MedicalAidPlan(RcdMedicalAidPlan plan) {
         initComponents();
     }
 

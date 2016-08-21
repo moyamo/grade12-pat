@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -18,8 +19,10 @@ import javax.persistence.EntityManager;
  * @author yaseen
  */
 public class AddPatientPanel extends javax.swing.JPanel {
+
     Session session;
     RcdPatient patient;
+
     /**
      * Creates new form AddPatientPanel
      */
@@ -28,10 +31,26 @@ public class AddPatientPanel extends javax.swing.JPanel {
         this.session = session;
         if (patient == null) {
             patient = new RcdPatient();
+
         }
         this.patient = patient;
         Calendar cal = Calendar.getInstance();
+        fillInformation();
 
+    }
+
+    private void fillInformation() {
+        txfFirstNames.setText(patient.getFirstnames());
+        txfSurname.setText(patient.getSurname());
+        txfCellphone.setText(patient.getCellphonenumber());
+        txfIdNumber.setText(patient.getIdnumber());
+        if (patient.getBirthday() != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(patient.getBirthday());
+            txfYear.setText(cal.get(cal.YEAR) + "");
+            txfMonth.setText(cal.get(cal.MONTH) + "");
+            txfDay.setText(cal.get(cal.DAY_OF_MONTH) + "");
+        }
     }
 
     /**
@@ -173,10 +192,11 @@ public class AddPatientPanel extends javax.swing.JPanel {
         patient.setFirstnames(txfFirstNames.getText());
         patient.setSurname(txfSurname.getText());
         int year = Integer.parseInt(txfYear.getText());
-        int month = Integer.parseInt(txfYear.getText());
-        int day = Integer.parseInt(txfYear.getText());
-        patient.setBirthday(new Date(year, month, day));
-        
+        int month = Integer.parseInt(txfMonth.getText());
+        int day = Integer.parseInt(txfDay.getText());
+        System.out.println(year);
+        patient.setBirthday(new Date(year - 1900, month, day));
+
         patient.setCellphonenumber(txfCellphone.getText());
         patient.setIdnumber(txfIdNumber.getText());
 
@@ -193,7 +213,19 @@ public class AddPatientPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        session.showViewBillingDetails(patient);
+        RcdPatientBillingDetails details;
+        try {
+            details = patient.getRcdPatientBillingDetailsList().iterator().next();
+        } catch (NoSuchElementException e) {
+            EntityManager em = session.getEntityManager();
+            em.getTransaction().begin();
+            details = new RcdPatientBillingDetails(session.nextId("PatientBillingDetails"));
+            details.setPatientid(this.patient);
+            patient.getRcdPatientBillingDetailsList().add(details);
+            em.persist(details);
+            em.getTransaction().commit();
+        }
+        session.showViewBillingDetails(details);
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txfYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfYearActionPerformed
@@ -215,18 +247,20 @@ public class AddPatientPanel extends javax.swing.JPanel {
             txfYear.setText(year);
             txfMonth.setText(month);
             txfDay.setText(day);
-        } catch (Exception e) {};
+        } catch (Exception e) {
+        };
     }//GEN-LAST:event_txfIdNumberFocusLost
-    
-    private boolean validateID()
-    {
+
+    private boolean validateID() {
         try {
             String id = txfIdNumber.getText();
             String year = id.substring(0, 2);
             String month = id.substring(2, 4);
             String day = id.substring(4, 6);
             boolean matches = txfYear.getText().substring(2) == year && month == txfMonth.getText() && day == txfDay.getText();
-            if (!matches) return false;
+            if (!matches) {
+                return false;
+            }
             for (int i = 0; i < id.length(); ++i) {
                 if (!Character.isDigit(id.charAt(i))) {
                     return false;

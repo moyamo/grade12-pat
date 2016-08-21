@@ -58,7 +58,11 @@ public class PatientTextField extends JTextField implements DocumentListener {
     
     public void setSelectedPatient(RcdPatient p) {
         selectedPatient = p;
-        setText(p.toString());
+        if (p != null) {
+            setText(p.toString());
+        } else {
+            setText("");
+        }
     }
     
     private boolean fuzzyMatch(String substring, String superstring) {
@@ -97,7 +101,7 @@ public class PatientTextField extends JTextField implements DocumentListener {
         item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                session.addNewPatient();
+                session.addNewPatient(null);
             }
         });
             

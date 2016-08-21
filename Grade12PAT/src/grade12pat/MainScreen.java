@@ -5,6 +5,11 @@
  */
 package grade12pat;
 
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -142,7 +147,23 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO Dialog to choose patient
-        session.addNewPatient();
+        JFrame frame = new JFrame();
+        PatientTextField field = new PatientTextField();
+        field.setSession(session);
+        field.setColumns(30);
+        frame.setLayout(new FlowLayout());
+        frame.add(field);
+        JButton but = new JButton("OK");
+        frame.add(but);
+        but.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               session.addNewPatient(field.getSelectedPatient());
+               frame.dispose();
+            }
+        });
+        frame.setVisible(true);
+        field.setActive();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

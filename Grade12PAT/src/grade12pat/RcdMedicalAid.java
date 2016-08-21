@@ -47,8 +47,6 @@ public class RcdMedicalAid implements Serializable {
     private String phonenumber;
     @Column(name = "EMAILADDRESS")
     private String emailaddress;
-    @OneToMany(mappedBy = "medicalaidplanid")
-    private List<RcdPatientBillingDetails> rcdPatientBillingDetailsList;
     @OneToMany(mappedBy = "medicalaidid")
     private List<RcdMedicalAidPlan> rcdMedicalAidPlanList;
 
@@ -97,15 +95,6 @@ public class RcdMedicalAid implements Serializable {
 
     public void setEmailaddress(String emailaddress) {
         this.emailaddress = emailaddress;
-    }
-
-    @XmlTransient
-    public List<RcdPatientBillingDetails> getRcdPatientBillingDetailsList() {
-        return rcdPatientBillingDetailsList;
-    }
-
-    public void setRcdPatientBillingDetailsList(List<RcdPatientBillingDetails> rcdPatientBillingDetailsList) {
-        this.rcdPatientBillingDetailsList = rcdPatientBillingDetailsList;
     }
 
     @XmlTransient

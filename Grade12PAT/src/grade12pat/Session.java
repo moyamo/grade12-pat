@@ -68,8 +68,8 @@ public class Session  {
     public void showRecordPayment() {
         mainScreen.addTab("Record Payment", new ReceivePaymentPanel());
     }
-    public void addNewPatient() {
-       mainScreen.addTab("Add Patient", new AddPatientPanel(this, null));
+    public void addNewPatient(RcdPatient patient) {
+       mainScreen.addTab("Add Patient", new AddPatientPanel(this, patient));
     }
     
     public void showManageUsers() {
@@ -93,8 +93,8 @@ public class Session  {
         activeFrame.setVisible(true);
     }
     
-    public void showViewBillingDetails(RcdPatient patient) {
-        mainScreen.addTab("Edit Billing Details", new BillingDetailsPanel(this));
+    public void showViewBillingDetails(RcdPatientBillingDetails details) {
+        mainScreen.addTab("Edit Billing Details", new BillingDetailsPanel(this, details));
     }
     
     public void showBillPatient() {
@@ -194,8 +194,8 @@ public class Session  {
         mainScreen.addTab("Medical History", wrapper);
     }
 
-    void showEditMedicalAid() {
-        this.mainScreen.addTab("Medical Aid Details", new MedicalAidPlan());
+    void showEditMedicalAid(RcdMedicalAidPlan plan) {
+        this.mainScreen.addTab("Medical Aid Details", new MedicalAidPlan(plan));
     }
 
    

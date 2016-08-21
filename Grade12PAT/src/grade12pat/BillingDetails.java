@@ -25,7 +25,7 @@ public class BillingDetails extends javax.swing.JFrame {
         this.patient = patient;
         this.session = session;
         try {
-            this.details = patient.getRcdPatientBillingDetailsCollection().iterator().next();
+            this.details = patient.getRcdPatientBillingDetailsList().iterator().next();
         } catch (NoSuchElementException e) {
             EntityManager em = session.getEntityManager();
             em.getTransaction().begin();
