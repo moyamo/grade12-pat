@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MedicalHistory extends javax.swing.JFrame {
     RcdPatient patient;
-    RcdPatientMedicalHistory medicalHistory;
+    //RcdPatientMedicalHistory medicalHistory;
     Session session;
     /**
      * Creates new form MedicalHistory
@@ -34,17 +34,17 @@ public class MedicalHistory extends javax.swing.JFrame {
         this.patient = patient;
         this.session = session;
         try {
-            this.medicalHistory = patient.getRcdPatientMedicalHistoryCollection().iterator().next();
+          //  this.medicalHistory = patient.getRcdPatientMedicalHistoryCollection().iterator().next();
         } catch (NoSuchElementException e) {
             EntityManager em = this.session.getEntityManager();
             em.getTransaction().begin();
-            this.medicalHistory = new RcdPatientMedicalHistory(session.nextId("PatientMedicalHistory"));
-            this.medicalHistory.setRcdPatientFileAttachmentsCollection(new Vector());
-            this.medicalHistory.setRcdPatientReadingsCollection(new Vector());
-            this.medicalHistory.setNotes("");
-            this.medicalHistory.setPatientid(this.patient);
-            this.patient.getRcdPatientMedicalHistoryCollection().add(this.medicalHistory);
-            em.persist(this.medicalHistory);
+//            this.medicalHistory = new RcdPatientMedicalHistory(session.nextId("PatientMedicalHistory"));
+//            this.medicalHistory.setRcdPatientFileAttachmentsCollection(new Vector());
+//            this.medicalHistory.setRcdPatientReadingsCollection(new Vector());
+//            this.medicalHistory.setNotes("");
+//            this.medicalHistory.setPatientid(this.patient);
+//            this.patient.getRcdPatientMedicalHistoryCollection().add(this.medicalHistory);
+//            em.persist(this.medicalHistory);
             em.getTransaction().commit();
             
         }

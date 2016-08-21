@@ -210,7 +210,7 @@ public class RcdPatient implements Serializable {
 
     @Override
     public String toString() {
-        return "grade12pat.RcdPatient[ id=" + id + " ]";
+        return getFirstnames() + " " + getSurname();
     }
     
 }

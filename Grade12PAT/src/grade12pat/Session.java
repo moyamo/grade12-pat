@@ -5,7 +5,6 @@
  */
 package grade12pat;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -13,6 +12,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -61,8 +61,8 @@ public class Session  {
         }
     }
     
-    public void showAddAppointment() {
-        mainScreen.addTab("Add Appointments", new AddAppointmentPanel());
+    public void showAddAppointment(RcdAppointments appointment) {
+        mainScreen.addTab("Add Appointments", new AddAppointmentPanel(this, appointment));
     }
     
     public void showRecordPayment() {
@@ -115,6 +115,9 @@ public class Session  {
         mainScreen.addTab("Statements", new PrintStatementsPanel());
     }
     
+    public void closeTab() {
+        mainScreen.removeTab(mainScreen.getSelected());
+    }
     
     public void loadSettings() {
         settings = Settings.loadSettingsFromFile();
@@ -153,6 +156,19 @@ public class Session  {
     }
     public Settings getSettings(){
         return this.settings;
+    }
+    
+    public boolean commit() {
+        boolean work = false;
+        // Returns true on success
+        try {
+            entityManager.getTransaction().commit();
+            work = true;
+        } catch (RollbackException | IllegalStateException e) {
+            e.printStackTrace();
+         //   entityManager.getTransaction().rollback();
+        }
+        return work;
     }
 
     void showViewMedicalHistory() {

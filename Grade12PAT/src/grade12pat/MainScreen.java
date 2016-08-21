@@ -180,6 +180,14 @@ public class MainScreen extends javax.swing.JFrame {
         tabbedPane.setSelectedIndex(i);
     }
     
+    protected void removeTab(int i) {
+        tabbedPane.remove(i);
+    }
+    
+    protected int getSelected() {
+        return tabbedPane.getSelectedIndex();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
