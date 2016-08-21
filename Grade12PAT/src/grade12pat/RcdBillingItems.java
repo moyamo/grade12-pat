@@ -100,7 +100,7 @@ public class RcdBillingItems implements Serializable {
 
     @Override
     public String toString() {
-        return "grade12pat.RcdBillingItems[ id=" + id + " ]";
+        return getDescription() + " (R " + getPrice() + ")";
     }
     
 }

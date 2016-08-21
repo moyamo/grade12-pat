@@ -5,17 +5,37 @@
  */
 package grade12pat;
 
+import java.util.List;
+import java.util.Vector;
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author yaseen
  */
 public class AddBillingItemPanel extends javax.swing.JPanel {
 
+    Session session;
+    List<RcdBillingItems> items;
+
     /**
      * Creates new form AddBillingItemPanel
      */
-    public AddBillingItemPanel() {
+    public AddBillingItemPanel(Session session) {
         initComponents();
+        this.session = session;
+        fillInformation();
+    }
+
+    private void fillInformation() {
+        items = session.sqlQuery("SELECT * FROM BillingItems", RcdBillingItems.class);
+        Vector itemStrings = new Vector();
+        for (RcdBillingItems b : items) {
+            itemStrings.add(b.toString());
+        }
+        lstItems.setListData(itemStrings);
     }
 
     /**
@@ -28,35 +48,51 @@ public class AddBillingItemPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        lstItems = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txfDescription = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txfPrice = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        lstItems.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        lstItems.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstItemsValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstItems);
 
         jLabel1.setText("Description");
 
-        jTextField1.setText("jTextField1");
-
         jLabel2.setText("Price");
 
-        jTextField2.setText("jTextField2");
-
         jButton1.setText("Add");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Edit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Delete");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,8 +100,8 @@ public class AddBillingItemPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -73,15 +109,15 @@ public class AddBillingItemPanel extends javax.swing.JPanel {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)))
+                            .addComponent(txfDescription)
+                            .addComponent(txfPrice)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)
-                        .addGap(0, 178, Short.MAX_VALUE)))
+                        .addGap(0, 100, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -92,11 +128,11 @@ public class AddBillingItemPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txfDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
@@ -108,6 +144,50 @@ public class AddBillingItemPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        RcdBillingItems bills = new RcdBillingItems(session.nextId("BillingItems"));
+        edit(bills);
+    }//GEN-LAST:event_jButton1ActionPerformed
+    private void edit(RcdBillingItems bills) {
+        bills.setDescription(txfDescription.getText());
+        bills.setPrice(Integer.parseInt(txfPrice.getText()));
+        EntityManager em = session.getEntityManager();
+        em.getTransaction().begin();
+        em.persist(bills);
+        session.commit();
+        fillInformation();
+    }
+    private void lstItemsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstItemsValueChanged
+        if (lstItems.getSelectedIndex() == -1) {
+            return;
+        }
+        RcdBillingItems selected = items.get(lstItems.getSelectedIndex());
+        txfDescription.setText(selected.getDescription());
+        txfPrice.setText(selected.getPrice() + "");
+    }//GEN-LAST:event_lstItemsValueChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (lstItems.getSelectedIndex() == -1) {
+            return;
+        }
+
+        RcdBillingItems selected = items.get(lstItems.getSelectedIndex());
+        edit(selected);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (lstItems.getSelectedIndex() == -1) {
+            return;
+        }
+
+        RcdBillingItems selected = items.get(lstItems.getSelectedIndex());
+        EntityManager em = session.getEntityManager();
+        em.getTransaction().begin();
+        em.remove(selected);
+        session.commit();
+        fillInformation();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -115,9 +195,9 @@ public class AddBillingItemPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JList<String> lstItems;
+    private javax.swing.JTextField txfDescription;
+    private javax.swing.JTextField txfPrice;
     // End of variables declaration//GEN-END:variables
 }

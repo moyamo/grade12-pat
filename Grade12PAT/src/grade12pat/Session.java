@@ -66,7 +66,7 @@ public class Session  {
     }
     
     public void showRecordPayment() {
-        mainScreen.addTab("Record Payment", new ReceivePaymentPanel());
+        mainScreen.addTab("Record Payment", new ReceivePaymentPanel(this));
     }
     public void addNewPatient(RcdPatient patient) {
        mainScreen.addTab("Add Patient", new AddPatientPanel(this, patient));
@@ -102,7 +102,7 @@ public class Session  {
     }
     
     public void showBillingItems() {
-        mainScreen.addTab("Edit Billing Items", new AddBillingItemPanel());
+        mainScreen.addTab("Edit Billing Items", new AddBillingItemPanel(this));
     }
     
     public void showGraph(List<RcdPatientReadings> readings, String title) {

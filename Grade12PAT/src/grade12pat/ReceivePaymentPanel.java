@@ -5,12 +5,14 @@
  */
 package grade12pat;
 
+import java.util.Date;
+
 /**
  *
  * @author yaseen
  */
 public class ReceivePaymentPanel extends javax.swing.JPanel {
-
+    Session session;
     /**
      * Creates new form ReceivePaymentPanel
      */
@@ -18,6 +20,7 @@ public class ReceivePaymentPanel extends javax.swing.JPanel {
         initComponents();
         txfPatient.setSession(session);
         txfPatient.setActive();
+        this.session = session;
     }
 
     /**
@@ -93,7 +96,16 @@ public class ReceivePaymentPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_txfAmountActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        txfPatient.getSelectedPatient();
+        RcdPayment payment = new RcdPayment(session.nextId("Payment"));
+        payment.setPatientid(txfPatient.getSelectedPatient().getId());
+        payment.setAmount(Integer.parseInt(txfAmount.getText()));
+        payment.setTime(new Date());
+        session.getEntityManager().getTransaction().begin();
+        session.getEntityManager().persist(payment);
+        if (session.commit()) {
+            session.closeTab();
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

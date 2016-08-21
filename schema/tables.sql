@@ -98,5 +98,6 @@ create table Payment (
 	id integer primary key,
 	patientId integer not null,
 	amount decimal not null,
-	time date not null
+	time date not null,
+	foreign key (id) references Patient(id)
 );
