@@ -145,7 +145,7 @@ public class PrintStatementsPanel extends javax.swing.JPanel {
             // TODO Catch Error Properly
             Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BadLocationException ex) {
-            Logger.getLogger(PrintStatements.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -159,7 +159,7 @@ public class PrintStatementsPanel extends javax.swing.JPanel {
             try {
                 job.print();
             } catch (PrinterException ex) {
-                Logger.getLogger(PrintStatements.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -178,11 +178,11 @@ public class PrintStatementsPanel extends javax.swing.JPanel {
             message.setContent(rtfDocument, "application/rtf");
             Transport.send(message);
         } catch (MessagingException ex) {
-            Logger.getLogger(PrintStatements.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(PrintStatements.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(PrintStatements.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jButton3ActionPerformed
