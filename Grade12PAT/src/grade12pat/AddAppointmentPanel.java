@@ -35,25 +35,28 @@ public class AddAppointmentPanel extends javax.swing.JPanel {
     }
     
     private void initializeFields() {
-       // patients = session.sqlQuery("SELECT * FROM PATIENT", RcdPatient.class);
-       // String[] patientNames = new String[patients.size() + 1];
-       // int i = 0;
-       // for (RcdPatient p : patients) {
-       //     patientNames[i] = p.getFirstnames() + " " + p.getSurname();
-       //     i++;
-       // }
-       // patientNames[i] = "Add new patient...";
-        //newPatientIndex = i;
-        //lstPatient.setListData(patientNames);
         String[] doctors = session.getSettings().getDoctors();
         cmbDoctors.setModel(new DefaultComboBoxModel<String>(doctors));
+        if (appointment.getDoctor() != null) {
+            cmbDoctors.setSelectedItem(appointment.getDoctor());
+        }
+        txfPatient.setSession(session);
+
+        if (appointment.getPatientid() != null) {
+            txfPatient.setSelectedPatient(appointment.getPatientid());
+        }
         Calendar cal = Calendar.getInstance();
+         if (appointment.getTime() != null) {
+            cal.setTime(appointment.getTime());
+        }
         txfYear.setText(cal.get(cal.YEAR) + "");
         txfMonth.setText(cal.get(cal.MONTH) + "");
         txfDay.setText(cal.get(cal.DAY_OF_MONTH) + "");
         txfHour.setText(cal.get(cal.HOUR) + "");
         txfMinute.setText(cal.get(cal.MINUTE) + "");
-        txfPatient.setSession(session);
+        
+        txfPatient.setActive();
+        
     }
      
     /**
@@ -71,12 +74,12 @@ public class AddAppointmentPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
-        txfYear = new javax.swing.JFormattedTextField();
-        txfMonth = new javax.swing.JFormattedTextField();
         txfDay = new javax.swing.JTextField();
         txfHour = new javax.swing.JTextField();
         txfMinute = new javax.swing.JTextField();
         txfPatient = new grade12pat.PatientTextField();
+        txfYear = new javax.swing.JTextField();
+        txfMonth = new javax.swing.JTextField();
 
         cmbDoctors.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -109,10 +112,6 @@ public class AddAppointmentPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        txfYear.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT))));
-
-        txfMonth.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-
         txfDay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txfDayActionPerformed(evt);
@@ -126,30 +125,35 @@ public class AddAppointmentPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(79, 79, 79))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txfPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel4))
-                                .addGap(104, 104, 104)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txfYear, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txfMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(104, 104, 104)
+                                        .addComponent(cmbDoctors, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(173, 173, 173)
                                         .addComponent(txfDay, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txfHour, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txfMinute, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(cmbDoctors, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(txfMinute, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(txfYear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txfMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txfPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 9, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -169,11 +173,11 @@ public class AddAppointmentPanel extends javax.swing.JPanel {
                         .addComponent(txfPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txfYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txfMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txfDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txfHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txfMinute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txfMinute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txfYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txfMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -185,11 +189,11 @@ public class AddAppointmentPanel extends javax.swing.JPanel {
         appointment.setPatientid(txfPatient.getSelectedPatient());
         
         int year = Integer.parseInt(txfYear.getText());
-        int month = Integer.parseInt(txfYear.getText());
-        int day = Integer.parseInt(txfYear.getText());
-        int hour = Integer.parseInt(txfYear.getText());
-        int minute = Integer.parseInt(txfYear.getText());
-        appointment.setTime(new Date(year, month, day, hour, minute));
+        int month = Integer.parseInt(txfMonth.getText());
+        int day = Integer.parseInt(txfDay.getText());
+        int hour = Integer.parseInt(txfHour.getText());
+        int minute = Integer.parseInt(txfMinute.getText());
+        appointment.setTime(new Date(year - 1900, month, day, hour, minute));
        
         EntityManager em = session.getEntityManager();
         em.getTransaction().begin();
@@ -198,10 +202,11 @@ public class AddAppointmentPanel extends javax.swing.JPanel {
         }
         em.persist(appointment);
         if (session.commit()) {
+            session.refreshAppointments();
             session.closeTab();
         }
     }//GEN-LAST:event_btnAddActionPerformed
-
+    
     private void txfDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfDayActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txfDayActionPerformed
@@ -217,9 +222,9 @@ public class AddAppointmentPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txfDay;
     private javax.swing.JTextField txfHour;
     private javax.swing.JTextField txfMinute;
-    private javax.swing.JFormattedTextField txfMonth;
+    private javax.swing.JTextField txfMonth;
     private grade12pat.PatientTextField txfPatient;
-    private javax.swing.JFormattedTextField txfYear;
+    private javax.swing.JTextField txfYear;
     // End of variables declaration//GEN-END:variables
 
 }

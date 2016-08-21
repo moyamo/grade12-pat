@@ -5,18 +5,30 @@
  */
 package grade12pat;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author yaseen
  */
 public class AppointmentBookPanel extends javax.swing.JPanel {
     Session session;
+    List<RcdAppointments> appointments;
     /**
      * Creates new form AppointmentBookPanel
      */
     public AppointmentBookPanel(Session session) {
         initComponents();
         this.session = session;
+        refreshList();
+        spnQueue.setValue(15);
     }
 
     /**
@@ -34,7 +46,7 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jSpinner1 = new javax.swing.JSpinner();
+        spnQueue = new javax.swing.JSpinner();
         jButton4 = new javax.swing.JButton();
 
         tblAppointments.setModel(new javax.swing.table.DefaultTableModel(
@@ -76,10 +88,25 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
         });
 
         jButton2.setText("Edit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Delete");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Queue");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -94,7 +121,7 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(spnQueue, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,7 +131,7 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spnQueue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4)))
         );
 
@@ -132,13 +159,111 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
 
     private void tblAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAppointmentsMouseClicked
         // TODO prevent secretary from using this.
-        session.showViewMedicalHistory();
+        if (evt.getClickCount() >= 2) {
+            session.showViewMedicalHistory();
+        }
     }//GEN-LAST:event_tblAppointmentsMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         session.showAddAppointment(null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        session.showAddAppointment(appointments.get(tblAppointments.getSelectedRow()));
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        Calendar latest = Calendar.getInstance();
+        for (int i = 0; i < appointments.size(); ++i) {
+            RcdAppointments app = appointments.get(i);
+            Calendar cal = Calendar.getInstance();
+            Calendar today = Calendar.getInstance();
+            cal.setTime(app.getTime());
+            if (cal.get(cal.DAY_OF_YEAR) == today.get(cal.DAY_OF_YEAR) && cal.get(cal.YEAR) == today.get(cal.YEAR)) {
+                if (latest.before(cal)) {
+                    latest = cal;
+                }
+            }
+        }
+        RcdAppointments app = new RcdAppointments();
+        latest.add(latest.MINUTE, (int) spnQueue.getValue());
+        app.setTime(Date.from(latest.toInstant()));
+        
+        session.showAddAppointment(app);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
+        RcdAppointments selected = appointments.get(tblAppointments.getSelectedRow());
+        EntityManager em = session.getEntityManager();
+        em.getTransaction().begin();
+        em.remove(selected);
+        session.commit();
+        refreshList();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    public void refreshList()
+    {
+        appointments = session.sqlQuery("SELECT * FROM APPOINTMENTS ORDER BY Time", RcdAppointments.class);
+        
+        String[][] tableContents = new String[appointments.size()][3];
+        String[] headings = {"Time", "Patient", "Doctor"};
+        for (int i = 0; i < appointments.size(); ++i) {
+            RcdAppointments app = appointments.get(i);
+            RcdPatient patient = app.getPatientid();
+            tableContents[i][0] = new SimpleDateFormat("yyyy/MM/dd hh:mm").format(app.getTime());
+            tableContents[i][1] = patient.toString();
+            tableContents[i][2] = app.getDoctor();
+        }
+        DefaultTableModel dtm = new DefaultTableModel(tableContents, headings);
+        
+        tblAppointments.setModel(new TableModel() {
+            @Override
+            public int getRowCount() {
+                return tableContents.length;
+            }
+
+            @Override
+            public int getColumnCount() {
+                return headings.length;
+            }
+            
+            @Override
+            public String getColumnName(int columnIndex) {
+                return headings[columnIndex];
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                return tableContents[rowIndex][columnIndex];
+            }
+
+            @Override
+            public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+                tableContents[rowIndex][columnIndex] = aValue.toString();
+            }
+
+            @Override
+            public void addTableModelListener(TableModelListener l) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void removeTableModelListener(TableModelListener l) {
+            //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -147,7 +272,7 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner spnQueue;
     private javax.swing.JTable tblAppointments;
     // End of variables declaration//GEN-END:variables
 }

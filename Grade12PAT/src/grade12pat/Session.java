@@ -133,7 +133,21 @@ public class Session  {
     public EntityManager getEntityManager() {
         return this.entityManager;
     }
-    
+    public void refreshAppointments()
+    {
+        AppointmentBookPanel book = null;
+        int i = 0;
+        JPanel tab = mainScreen.getTab(i);
+        for ( ; tab != null; i++, tab = mainScreen.getTab(i)) {
+            if (tab.getClass() == AppointmentBookPanel.class) {
+                book = (AppointmentBookPanel) tab;
+                break;
+            }
+        }
+        if (book != null) {
+            book.refreshList();
+        }
+    }
     public List sqlQuery(String query, Class resultClass) {
         Query q =  this.entityManager.createNativeQuery(query, resultClass);
         return q.getResultList();

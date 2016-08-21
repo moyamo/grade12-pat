@@ -171,7 +171,6 @@ public class MainScreen extends javax.swing.JFrame {
         try {
             return (JPanel) tabbedPane.getComponentAt(i);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("OUT of BOUNDS " + i);
             return null;
         }
     }

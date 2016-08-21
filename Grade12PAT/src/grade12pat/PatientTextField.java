@@ -27,6 +27,7 @@ public class PatientTextField extends JTextField implements DocumentListener {
     private JPopupMenu popup;
     private RcdPatient selectedPatient;
     private Session session;
+    private boolean active;
     
     
     public PatientTextField() {
@@ -37,6 +38,10 @@ public class PatientTextField extends JTextField implements DocumentListener {
     
     public void setList(List<RcdPatient> patients) {
         this.patients = patients;
+    }
+    
+    public void setActive() {
+        active = true;
     }
     
     public void refreshList() {
@@ -103,17 +108,23 @@ public class PatientTextField extends JTextField implements DocumentListener {
 
     @Override
     public void insertUpdate(DocumentEvent e) {
+        if (this.active){
         popupThing();
+        }
     }
 
     @Override
     public void removeUpdate(DocumentEvent e) {
+        if (this.active) {
         popupThing();
+        }
     }
 
     @Override
     public void changedUpdate(DocumentEvent e) {
-        popupThing();
+        if (this.active) {
+            popupThing();
+        }
     }
     
 }
