@@ -16,11 +16,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.rtf.RTFEditorKit;
 
@@ -165,25 +160,21 @@ public class PrintStatementsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        javax.mail.Session mailSession = javax.mail.Session.getInstance(System.getProperties());
-        Message message = new MimeMessage(mailSession);
-        try {
-            message.setFrom(new InternetAddress("noreply@practicedomain.com"));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("yaseenmowzer@gmail.com"));
-            message.setSubject("Test");
-            BufferedReader br = new BufferedReader(new FileReader("account-statement.rtf"));
-            char[] rtfDocument = new char[(int) new File("account-statement.rtf").length()];
-            br.read(rtfDocument);
-            br.close();
-            message.setContent(rtfDocument, "application/rtf");
-            Transport.send(message);
-        } catch (MessagingException ex) {
-            Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        javax.mail.Session mailSession = javax.mail.Session.getInstance(System.getProperties());
+//        Message message = new MimeMessage(mailSession);
+//        try {
+//            message.setFrom(new InternetAddress("noreply@practicedomain.com"));
+//            message.addRecipient(Message.RecipientType.TO, new InternetAddress("yaseenmowzer@gmail.com"));
+//            message.setSubject("Test");
+//            BufferedReader br = new BufferedReader(new FileReader("account-statement.rtf"));
+//            char[] rtfDocument = new char[(int) new File("account-statement.rtf").length()];
+//            br.read(rtfDocument);
+//            br.close();
+//            message.setContent(rtfDocument, "application/rtf");
+//            Transport.send(message);
+//        } catch (MessagingException ex) {
+//            Logger.getLogger(PrintStatementsPanel.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }//GEN-LAST:event_jButton3ActionPerformed
 

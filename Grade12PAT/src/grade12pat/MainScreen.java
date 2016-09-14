@@ -147,8 +147,8 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO Dialog to choose patient
-        JFrame frame = new JFrame();
-        PatientTextField field = new PatientTextField();
+        final JFrame frame = new JFrame();
+        final PatientTextField field = new PatientTextField();
         field.setSession(session);
         field.setColumns(30);
         frame.setLayout(new FlowLayout());

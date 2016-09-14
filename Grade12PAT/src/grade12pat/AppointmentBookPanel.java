@@ -214,8 +214,8 @@ public class AppointmentBookPanel extends javax.swing.JPanel {
     {
         appointments = session.sqlQuery("SELECT * FROM APPOINTMENTS ORDER BY Time", RcdAppointments.class);
         
-        String[][] tableContents = new String[appointments.size()][3];
-        String[] headings = {"Time", "Patient", "Doctor"};
+        final String[][] tableContents = new String[appointments.size()][3];
+        final String[] headings = {"Time", "Patient", "Doctor"};
         for (int i = 0; i < appointments.size(); ++i) {
             RcdAppointments app = appointments.get(i);
             RcdPatient patient = app.getPatientid();

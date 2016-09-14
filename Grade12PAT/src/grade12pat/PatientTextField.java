@@ -83,7 +83,7 @@ public class PatientTextField extends JTextField implements DocumentListener {
                 filter.add(patients.get(i));
             }
         }
-        for (RcdPatient p: filter) {
+        for (final RcdPatient p: filter) {
             JMenuItem item = new JMenuItem(p.toString());
             
             item.addActionListener(new ActionListener() {
