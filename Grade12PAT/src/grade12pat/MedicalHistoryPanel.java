@@ -475,17 +475,26 @@ class AllergyTableModel extends BetterTableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         RcdAllergies allergy;
-        if (rowIndex < content.size()) {
+        if (aValue.equals("") && rowIndex < content.size()) {
             allergy = (RcdAllergies) content.get(rowIndex);
+            session.getEntityManager().getTransaction().begin();
+            session.getEntityManager().remove(allergy);
+            if(session.commit()) {
+                content.remove(allergy);
+            }
         } else {
-            allergy = new RcdAllergies(session.nextId("Allergies"));
-            allergy.setPatientid(patient);
-            content.add(allergy);
+            if (rowIndex < content.size()) {
+                allergy = (RcdAllergies) content.get(rowIndex);
+            } else {
+                allergy = new RcdAllergies(session.nextId("Allergies"));
+                allergy.setPatientid(patient);
+                content.add(allergy);
+            }
+            allergy.setAllergytype((String) aValue);
+            session.getEntityManager().getTransaction().begin();
+            session.getEntityManager().persist(allergy);
+            session.commit();
         }
-        allergy.setAllergytype((String) aValue);
-        session.getEntityManager().getTransaction().begin();
-        session.getEntityManager().persist(allergy);
-        session.commit();
         notifyListeners();
     }
 
