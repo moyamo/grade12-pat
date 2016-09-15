@@ -106,9 +106,8 @@ public class Session  {
     }
     
     public void showGraph(List<RcdPatientReadings> readings, String title) {
-        disposeIfNotNull();
-        activeFrame = new GraphView(readings, title);
-        activeFrame.setVisible(true);
+        JFrame frame = new GraphView(readings, title);
+        frame.setVisible(true);
     }
     
     public void showPrintStatements() {

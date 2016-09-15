@@ -306,7 +306,9 @@ public class MedicalHistoryPanel extends javax.swing.JPanel {
                 "Graph", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null,
                 readings.toArray(), null);
-        session.showGraph(new ArrayList(this.patient.getRcdPatientReadingsList()), readings.get(result));
+        List<String> filter = session.sqlQuery("SELECT * from PatientReadings WHERE readingType = '" + readings.get(result) + "'", RcdPatientReadings.class);
+        
+        session.showGraph(new ArrayList(filter), readings.get(result));
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

@@ -163,6 +163,7 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
         frame.setVisible(true);
+        frame.pack();
         field.setActive();
     }//GEN-LAST:event_jButton2ActionPerformed
 
