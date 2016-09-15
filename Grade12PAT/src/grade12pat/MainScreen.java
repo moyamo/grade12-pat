@@ -42,6 +42,7 @@ public class MainScreen extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -88,6 +89,13 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
+        jButton7.setText("Practice Information");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -104,6 +112,8 @@ public class MainScreen extends javax.swing.JFrame {
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton7)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -114,7 +124,8 @@ public class MainScreen extends javax.swing.JFrame {
                 .addComponent(jButton3)
                 .addComponent(jButton4)
                 .addComponent(jButton5)
-                .addComponent(jButton6))
+                .addComponent(jButton6)
+                .addComponent(jButton7))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -184,6 +195,10 @@ public class MainScreen extends javax.swing.JFrame {
         // TODO Prevent receptionist from performing this action (Do it in session?)
         session.showManageUsers();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        session.showSetup();
+    }//GEN-LAST:event_jButton7ActionPerformed
     protected void addTab(String title, JPanel panel) {
         tabbedPane.addTab(title, panel);
         tabbedPane.setSelectedComponent(panel);
@@ -216,6 +231,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables

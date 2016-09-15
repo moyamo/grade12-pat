@@ -20,7 +20,9 @@ public class Setup extends javax.swing.JFrame {
      * Creates new form Setup
      */
     public Setup(Settings settings) {
+        initComponents();
         doctors = new ArrayList<String>();
+        this.settings = settings;
         if (this.settings != null) {
             doctors = new ArrayList<String>(Arrays.asList(settings.getDoctors()));
             lstDoctors.setListData(doctors.toArray(new String[0]));
@@ -30,7 +32,6 @@ public class Setup extends javax.swing.JFrame {
             txfPracticeNumber.setText(this.settings.getPracticeNumber());
             txfPracticeAddress.setText(this.settings.getPracticeAddress());
         }
-        initComponents();
     }
 
     /**
