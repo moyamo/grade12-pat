@@ -1,0 +1,8 @@
+INSERT INTO APP.MEDICALAID (ID, "NAME", ADDRESS, PHONENUMBER, EMAILADDRESS) 
+	VALUES (1, 'Bestmed Medical Scheme', '', '086 000 2378', 'aid@bestmed.co.za')
+INSERT INTO APP.MEDICALAID (ID, "NAME", ADDRESS, PHONENUMBER, EMAILADDRESS) 
+	VALUES (2, 'Discovery Health', '', '011 529 2888', 'aid@discovery.co.za')
+INSERT INTO APP.MEDICALAID (ID, "NAME", ADDRESS, PHONENUMBER, EMAILADDRESS) 
+	VALUES (3, 'Liberty Medical Scheme', '', '086 000 2153', 'medical@liberty.co.za')
+INSERT INTO APP.MEDICALAID (ID, "NAME", ADDRESS, PHONENUMBER, EMAILADDRESS) 
+	VALUES (4, 'Profmed', '', '011 628 8900', 'medicalaid@profmed.co.za')

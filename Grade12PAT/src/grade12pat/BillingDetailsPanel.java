@@ -32,7 +32,9 @@ public class BillingDetailsPanel extends javax.swing.JPanel {
     private void fillInformation() {
         txfEmailAddress.setText(details.getEmailaddress());
         txaHomeAddress.setText(details.getHomeaddress());
-        cmbPaymentMethod.setSelectedIndex(details.getPaymentmethod().equals("MEDICALAID") ? 0 : 1);
+        if (details.getPaymentmethod() != null) {
+            cmbPaymentMethod.setSelectedIndex(details.getPaymentmethod().equals("MEDICALAID") ? 0 : 1);
+        }
         if (details.getMedicalaidplanid() != null) {
             txfMember.setSelectedPatient(details.getMedicalaidplanid().getPrimarymemberid());
         }
